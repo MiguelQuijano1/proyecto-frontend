@@ -44,32 +44,66 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen 
   ];
 
   return (
-    <aside className={`${
-      sidebarOpen ? 'w-72' : 'w-20'
-    } bg-gradient-to-b from-slate-900 via-indigo-900 to-purple-900 text-white transition-all duration-300 flex flex-col relative overflow-hidden`}>
-      
+    <aside 
+      className={`${sidebarOpen ? 'w-72' : 'w-20'} transition-all duration-300 flex flex-col relative overflow-hidden`}
+      style={{
+        background: 'linear-gradient(180deg, #0f172a 0%, #312e81 50%, #581c87 100%)'
+      }}
+    >
       {/* Efectos de fondo animados */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-0 left-0 w-72 h-72 bg-indigo-500 rounded-full filter blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-0 w-72 h-72 bg-purple-500 rounded-full filter blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <div 
+          className="absolute top-0 left-0 rounded-full animate-pulse"
+          style={{
+            width: '288px',
+            height: '288px',
+            background: '#6366f1',
+            filter: 'blur(80px)'
+          }}
+        />
+        <div 
+          className="absolute bottom-0 right-0 rounded-full animate-pulse"
+          style={{
+            width: '288px',
+            height: '288px',
+            background: '#a855f7',
+            filter: 'blur(80px)',
+            animationDelay: '1s'
+          }}
+        />
       </div>
 
       {/* Header del Sidebar */}
-      <div className="relative p-5 flex items-center justify-between border-b border-white/10">
+      <div className="relative p-5 flex items-center justify-between border-b border-white border-opacity-10">
         {sidebarOpen && (
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-400 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+            <div 
+              className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
+              style={{
+                background: 'linear-gradient(135deg, #818cf8 0%, #a855f7 100%)'
+              }}
+            >
               <Zap className="text-white" size={20} />
             </div>
             <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-white to-indigo-200 bg-clip-text text-transparent">ONPE</h1>
+              <h1 
+                className="text-xl font-bold"
+                style={{
+                  background: 'linear-gradient(90deg, #ffffff 0%, #c7d2fe 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text'
+                }}
+              >
+                ONPE
+              </h1>
               <p className="text-xs text-indigo-300">Sistema Electoral</p>
             </div>
           </div>
         )}
         <button 
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="p-2 hover:bg-white/10 rounded-lg transition-all duration-200 hover:scale-110"
+          className="p-2 hover:bg-white hover:bg-opacity-10 rounded-lg transition-all duration-200 text-white"
         >
           {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
@@ -94,20 +128,34 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen 
                       onClick={() => setActiveSection(item.id)}
                       className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group relative overflow-hidden ${
                         isActive
-                          ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/50'
-                          : 'text-indigo-200 hover:bg-white/10 hover:text-white'
+                          ? 'text-white shadow-lg'
+                          : 'text-indigo-200 hover:bg-white hover:bg-opacity-10 hover:text-white'
                       }`}
+                      style={isActive ? {
+                        background: 'linear-gradient(90deg, #6366f1 0%, #a855f7 100%)',
+                        boxShadow: '0 10px 15px -3px rgba(99, 102, 241, 0.5)'
+                      } : {}}
                       title={!sidebarOpen ? item.name : ''}
                     >
                       {isActive && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent animate-pulse"></div>
+                        <div 
+                          className="absolute inset-0 animate-pulse"
+                          style={{
+                            background: 'linear-gradient(90deg, rgba(255,255,255,0.2) 0%, transparent 100%)'
+                          }}
+                        />
                       )}
-                      <Icon size={20} className={`relative z-10 ${isActive ? 'animate-pulse' : 'group-hover:scale-110 transition-transform'}`} />
+                      <Icon 
+                        size={20} 
+                        className={`relative z-10 ${isActive ? 'animate-pulse' : 'group-hover:scale-110 transition-transform'}`} 
+                      />
                       {sidebarOpen && (
                         <span className="text-sm font-medium relative z-10">{item.name}</span>
                       )}
                       {isActive && (
-                        <div className="absolute right-0 w-1 h-8 bg-white rounded-l-full"></div>
+                        <div 
+                          className="absolute right-0 w-1 h-8 bg-white rounded-l-full"
+                        />
                       )}
                     </button>
                   </li>
@@ -119,28 +167,12 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen 
       </nav>
 
       {/* User Section */}
-      <div className="relative p-4 border-t border-white/10">
-        <button className="w-full flex items-center gap-3 px-4 py-3 text-indigo-200 hover:bg-white/10 rounded-xl transition-all group">
+      <div className="relative p-4 border-t border-white border-opacity-10">
+        <button className="w-full flex items-center gap-3 px-4 py-3 text-indigo-200 hover:bg-white hover:bg-opacity-10 rounded-xl transition-all group">
           <LogOut size={20} className="group-hover:scale-110 transition-transform" />
           {sidebarOpen && <span className="text-sm font-medium">Cerrar Sesión</span>}
         </button>
       </div>
-
-      <style jsx>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.2);
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(255, 255, 255, 0.3);
-        }
-      `}</style>
     </aside>
   );
 };
