@@ -1,25 +1,35 @@
 import { Bell, Search, User } from 'lucide-react';
 
 const Header = ({ activeSection, sidebarOpen }) => {
-  const getPageTitle = () => {
-    const titles = {
-      'dashboard': 'Dashboard',
-      'datos': 'Gestión de Datos',
-      'carga': 'Cargar Datos',
-      'limpieza': 'Limpieza de Datos',
-      'analisis': 'Análisis Estadístico',
-      'visualizacion': 'Visualización de Datos',
-      'votantes': 'Registro de Votantes'
+  const getPageInfo = () => {
+    const pages = {
+      'dashboard': { title: 'Dashboard', subtitle: 'Vista general del sistema' },
+      'candidatos': { title: 'Candidatos', subtitle: 'Gestión de candidatos electorales' },
+      'partidos': { title: 'Partidos Políticos', subtitle: 'Registro de organizaciones políticas' },
+      'votantes': { title: 'Padrón Electoral', subtitle: 'Base de datos de votantes registrados' },
+      'mesas': { title: 'Mesas de Votación', subtitle: 'Organización de locales y mesas' },
+      'votacion': { title: 'Proceso de Votación', subtitle: 'Gestión del día electoral' },
+      'resultados': { title: 'Resultados Electorales', subtitle: 'Escrutinio y resultados' },
+      'datos': { title: 'Gestión de Datos', subtitle: 'Administración de bases de datos' },
+      'carga': { title: 'Importar Datos', subtitle: 'Carga masiva de información' },
+      'limpieza': { title: 'Limpieza de Datos', subtitle: 'Validación y corrección' },
+      'analisis': { title: 'Análisis Estadístico', subtitle: 'Análisis y métricas electorales' },
+      'visualizacion': { title: 'Visualización', subtitle: 'Gráficos y reportes visuales' },
+      'reportes': { title: 'Reportes', subtitle: 'Generación de informes' },
+      'auditoria': { title: 'Auditoría', subtitle: 'Registro de actividades del sistema' },
+      'configuracion': { title: 'Configuración', subtitle: 'Ajustes del sistema' },
     };
-    return titles[activeSection] || 'Dashboard';
+    return pages[activeSection] || { title: 'Dashboard', subtitle: 'Vista general' };
   };
+
+  const pageInfo = getPageInfo();
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
       <div className="px-8 py-4 flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">{getPageTitle()}</h2>
-          <p className="text-sm text-gray-500">Sistema de Análisis Electoral 2024</p>
+          <h2 className="text-2xl font-bold text-gray-800">{pageInfo.title}</h2>
+          <p className="text-sm text-gray-500">{pageInfo.subtitle}</p>
         </div>
 
         <div className="flex items-center gap-4">
@@ -45,7 +55,7 @@ const Header = ({ activeSection, sidebarOpen }) => {
               <User size={18} className="text-white" />
             </div>
             <div className="text-left hidden md:block">
-              <p className="text-sm font-medium text-gray-700">Admin</p>
+              <p className="text-sm font-medium text-gray-700">Admin Electoral</p>
               <p className="text-xs text-gray-500">Administrador</p>
             </div>
           </button>
