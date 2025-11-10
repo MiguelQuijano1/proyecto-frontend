@@ -141,34 +141,6 @@ const CargaDatos = () => {
           </div>
         )}
       </div>
-
-      {/* Plantillas Disponibles */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-        <h3 className="text-lg font-bold text-gray-800 mb-4">Plantillas Disponibles</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 border border-gray-200 rounded-lg hover:border-indigo-500 transition-colors cursor-pointer">
-            <div className="flex items-center justify-between mb-2">
-              <h4 className="font-medium text-gray-800">Plantilla CSV</h4>
-              <Download size={18} className="text-indigo-600" />
-            </div>
-            <p className="text-xs text-gray-600">Formato estándar para registro de votantes</p>
-          </div>
-          <div className="p-4 border border-gray-200 rounded-lg hover:border-indigo-500 transition-colors cursor-pointer">
-            <div className="flex items-center justify-between mb-2">
-              <h4 className="font-medium text-gray-800">Plantilla Excel</h4>
-              <Download size={18} className="text-indigo-600" />
-            </div>
-            <p className="text-xs text-gray-600">Incluye validación de datos automática</p>
-          </div>
-          <div className="p-4 border border-gray-200 rounded-lg hover:border-indigo-500 transition-colors cursor-pointer">
-            <div className="flex items-center justify-between mb-2">
-              <h4 className="font-medium text-gray-800">Plantilla JSON</h4>
-              <Download size={18} className="text-indigo-600" />
-            </div>
-            <p className="text-xs text-gray-600">Para integración con APIs externas</p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

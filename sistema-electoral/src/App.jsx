@@ -13,13 +13,9 @@ import RegistroVotantes from './pages/RegistroVotantes';
 
 // Nuevas páginas
 import Candidatos from './pages/Candidatos';
-import PartidosPoliticos from './pages/PartidosPoliticos';
-import MesasVotacion from './pages/MesasVotacion';
 import Votacion from './pages/Votacion';
 import ResultadosElectorales from './pages/ResultadosElectorales';
 import Reportes from './pages/Reportes';
-import Configuracion from './pages/Configuracion';
-import Auditoria from './pages/Auditoria';
 
 function App() {
   const [activeSection, setActiveSection] = useState('dashboard');
@@ -31,10 +27,6 @@ function App() {
       
       // Módulo Electoral
       case 'candidatos': return <Candidatos />;
-      case 'partidos': return <PartidosPoliticos />;
-      case 'mesas': return <MesasVotacion />;
-      case 'votacion': return <Votacion />;
-      case 'resultados': return <ResultadosElectorales />;
       case 'votantes': return <RegistroVotantes />;
       
       // Módulo de Datos
@@ -46,8 +38,6 @@ function App() {
       
       // Módulo de Administración
       case 'reportes': return <Reportes />;
-      case 'auditoria': return <Auditoria />;
-      case 'configuracion': return <Configuracion />;
       
       default: return <Dashboard />;
     }

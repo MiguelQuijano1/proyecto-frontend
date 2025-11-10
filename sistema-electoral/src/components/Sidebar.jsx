@@ -16,10 +16,6 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen 
       title: 'Gestión Electoral',
       items: [
         { id: 'candidatos', name: 'Candidatos', icon: UserCheck },
-        { id: 'partidos', name: 'Partidos Políticos', icon: Building2 },
-        { id: 'votantes', name: 'Padrón Electoral', icon: Users },
-        { id: 'mesas', name: 'Mesas de Votación', icon: MapPinned },
-        { id: 'votacion', name: 'Proceso de Votación', icon: Vote },
         { id: 'resultados', name: 'Resultados', icon: BarChart3 },
       ]
     },
@@ -28,7 +24,7 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen 
       items: [
         { id: 'datos', name: 'Gestión de Datos', icon: Database },
         { id: 'carga', name: 'Importar Datos', icon: FileUp },
-        { id: 'limpieza', name: 'Limpieza de Datos', icon: Settings },
+        { id: 'limpieza', name: 'Deteccion de Fraudes', icon: Settings },
         { id: 'analisis', name: 'Análisis Estadístico', icon: TrendingUp },
         { id: 'visualizacion', name: 'Visualización', icon: BarChart3 },
       ]
@@ -37,8 +33,6 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen 
       title: 'Administración',
       items: [
         { id: 'reportes', name: 'Reportes', icon: FileText },
-        { id: 'auditoria', name: 'Auditoría', icon: ShieldCheck },
-        { id: 'configuracion', name: 'Configuración', icon: ClipboardList },
       ]
     }
   ];

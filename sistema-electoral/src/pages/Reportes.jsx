@@ -252,47 +252,6 @@ const Reportes = () => {
           ))}
         </div>
       </div>
-
-      {/* Generación Programada */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-        <h3 className="text-lg font-bold text-gray-800 mb-4">Reportes Programados</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[
-            { nombre: 'Reporte Diario de Actividad', frecuencia: 'Diario - 08:00 AM', proximo: '26/10/2024' },
-            { nombre: 'Resumen Semanal Electoral', frecuencia: 'Semanal - Lunes 08:00 AM', proximo: '28/10/2024' },
-            { nombre: 'Informe Mensual Completo', frecuencia: 'Mensual - Día 1, 08:00 AM', proximo: '01/11/2024' },
-          ].map((prog, index) => (
-            <div key={index} className="p-4 border border-gray-200 rounded-lg">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h4 className="font-medium text-gray-800">{prog.nombre}</h4>
-                  <p className="text-sm text-gray-600 mt-1">{prog.frecuencia}</p>
-                  <p className="text-xs text-indigo-600 mt-2">Próxima generación: {prog.proximo}</p>
-                </div>
-                <Calendar className="text-indigo-600" size={20} />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Plantillas de Reportes */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-        <h3 className="text-lg font-bold text-gray-800 mb-4">Plantillas Personalizadas</h3>
-        <p className="text-sm text-gray-600 mb-4">Crea reportes personalizados según tus necesidades</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {['Plantilla Básica', 'Plantilla Ejecutiva', 'Plantilla Detallada'].map((plantilla, index) => (
-            <button
-              key={index}
-              className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition-colors text-left"
-            >
-              <FileText className="text-indigo-600 mb-2" size={24} />
-              <p className="font-medium text-gray-800">{plantilla}</p>
-              <p className="text-xs text-gray-600 mt-1">Generar reporte personalizado</p>
-            </button>
-          ))}
-        </div>
-      </div>
     </div>
   );
 };

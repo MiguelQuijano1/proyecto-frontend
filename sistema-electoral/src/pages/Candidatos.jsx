@@ -63,7 +63,7 @@ const Candidatos = () => {
   const estadisticas = [
     { label: 'Total Candidatos', value: '145', icon: Users, gradient: 'from-blue-500 to-cyan-500' },
     { label: 'Presidenciales', value: '8', icon: Award, gradient: 'from-purple-500 to-pink-500' },
-    { label: 'Congresistas', value: '120', icon: Users, gradient: 'from-green-500 to-emerald-500' },
+    { label: 'Distritales', value: '120', icon: Users, gradient: 'from-green-500 to-emerald-500' },
     { label: 'Regionales', value: '17', icon: TrendingUp, gradient: 'from-orange-500 to-red-500' },
   ];
 
@@ -77,16 +77,6 @@ const Candidatos = () => {
             <h1 className="text-3xl font-bold text-white mb-2">Gestión de Candidatos</h1>
             <p className="text-white/90">Administra y supervisa todos los candidatos electorales</p>
           </div>
-          <button
-            onClick={() => {
-              setModalType('add');
-              setShowModal(true);
-            }}
-            className="flex items-center gap-2 px-6 py-3 bg-white text-indigo-600 rounded-xl hover:scale-105 transition-transform shadow-xl font-semibold"
-          >
-            <UserPlus size={20} />
-            Nuevo Candidato
-          </button>
         </div>
       </div>
 

@@ -75,19 +75,11 @@ const Visualizacion = () => {
       <div className="flex items-center justify-between bg-white p-4 rounded-xl shadow-sm border border-gray-200">
         <div className="flex items-center gap-3">
           <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-            <Settings size={18} />
-            <span className="hidden md:inline">Configurar</span>
-          </button>
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
             <RefreshCw size={18} />
             <span className="hidden md:inline">Actualizar</span>
           </button>
         </div>
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-            <Maximize2 size={18} />
-            <span className="hidden md:inline">Pantalla Completa</span>
-          </button>
           <button className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
             <Download size={18} />
             <span className="hidden md:inline">Exportar</span>
@@ -304,27 +296,6 @@ const Visualizacion = () => {
           <div className="text-center p-4 bg-pink-50 rounded-lg">
             <p className="text-sm text-pink-800 font-medium">Edad Media</p>
             <p className="text-2xl font-bold text-pink-900">38.5</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Opciones de Exportación */}
-      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-6 rounded-xl shadow-lg text-white">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-xl font-bold mb-2">Exportar Visualizaciones</h3>
-            <p className="text-sm opacity-90">Descarga gráficos en alta calidad</p>
-          </div>
-          <div className="flex gap-3">
-            <button className="px-6 py-3 bg-white text-indigo-600 rounded-lg hover:bg-gray-100 transition-colors font-medium">
-              PNG
-            </button>
-            <button className="px-6 py-3 bg-white text-indigo-600 rounded-lg hover:bg-gray-100 transition-colors font-medium">
-              SVG
-            </button>
-            <button className="px-6 py-3 bg-white text-indigo-600 rounded-lg hover:bg-gray-100 transition-colors font-medium">
-              PDF
-            </button>
           </div>
         </div>
       </div>

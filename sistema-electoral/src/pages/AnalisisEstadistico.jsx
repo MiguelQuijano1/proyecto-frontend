@@ -363,27 +363,6 @@ const AnalisisEstadistico = () => {
           </div>
         </div>
       )}
-
-      {/* Exportar Resultados */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-bold text-gray-800">Exportar Análisis</h3>
-            <p className="text-sm text-gray-600">Descarga los resultados en diferentes formatos</p>
-          </div>
-          <div className="flex gap-3">
-            <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-              PDF
-            </button>
-            <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-              Excel
-            </button>
-            <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
-              Informe Completo
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
