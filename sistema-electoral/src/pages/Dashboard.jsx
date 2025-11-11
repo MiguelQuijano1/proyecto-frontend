@@ -71,9 +71,6 @@ const Dashboard = () => {
             Gestiona todo el proceso electoral de manera eficiente y transparente. Sistema actualizado en tiempo real.
           </p>
           <div className="flex items-center gap-4 mt-6">
-            <button className="px-6 py-3 bg-white text-indigo-600 rounded-xl font-semibold hover:scale-105 transition-transform shadow-lg">
-              Ver Tutorial
-            </button>
             <button className="px-6 py-3 bg-white/20 backdrop-blur-sm text-white rounded-xl font-semibold hover:bg-white/30 transition-colors">
               Documentación
             </button>

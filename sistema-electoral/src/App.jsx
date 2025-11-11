@@ -24,7 +24,7 @@ function App() {
   const renderContent = () => {
     switch(activeSection) {
       case 'dashboard': return <Dashboard />;
-      
+      case 'resultados': return <ResultadosElectorales />;
       // Módulo Electoral
       case 'candidatos': return <Candidatos />;
       case 'votantes': return <RegistroVotantes />;

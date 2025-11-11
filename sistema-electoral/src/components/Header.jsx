@@ -9,7 +9,7 @@ const Header = ({ activeSection, sidebarOpen }) => {
       'votantes': { title: 'Padrón Electoral', subtitle: 'Base de datos de votantes registrados', icon: '📋' },
       'mesas': { title: 'Mesas de Votación', subtitle: 'Organización de locales y mesas', icon: '🗳️' },
       'votacion': { title: 'Proceso de Votación', subtitle: 'Gestión del día electoral', icon: '✅' },
-      'resultados': { title: 'Resultados Electorales', subtitle: 'Escrutinio y resultados', icon: '📈' },
+      'resultados': { title: 'Resultados Electorales', icon: '📈' },
       'datos': { title: 'Gestión de Datos', subtitle: 'Administración de bases de datos', icon: '💾' },
       'carga': { title: 'Importar Datos', subtitle: 'Carga masiva de información', icon: '📤' },
       'limpieza': { title: 'Limpieza de Datos', subtitle: 'Validación y corrección', icon: '🧹' },
@@ -41,22 +41,6 @@ const Header = ({ activeSection, sidebarOpen }) => {
         </div>
 
         <div className="flex items-center gap-4">
-          {/* Barra de Búsqueda */}
-          <div className="relative hidden md:block">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" size={18} />
-            <input
-              type="text"
-              placeholder="Buscar..."
-              className="pl-10 pr-4 py-2.5 bg-white/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent w-64 transition-all"
-            />
-          </div>
-
-          {/* Notificaciones */}
-          <button className="relative p-2.5 text-slate-600 hover:bg-white/50 rounded-xl transition-all hover:scale-110 group">
-            <Bell size={20} className="group-hover:animate-pulse" />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-gradient-to-r from-red-500 to-pink-500 rounded-full animate-pulse"></span>
-          </button>
-
           {/* Usuario */}
           <button className="flex items-center gap-3 p-2 pr-4 hover:bg-white/50 rounded-xl transition-all group">
             <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30 group-hover:scale-110 transition-transform">

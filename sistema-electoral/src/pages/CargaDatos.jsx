@@ -1,8 +1,20 @@
 import { useState } from 'react';
-import { Upload, File, CheckCircle, AlertCircle, Download, X } from 'lucide-react';
+import { Upload, File, CheckCircle, AlertCircle, Download, X, Database, Eye, Trash2, Calendar, Users, BarChart } from 'lucide-react';
 
 const CargaDatos = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [datasets, setDatasets] = useState([
+    {
+      id: 2,
+      nombre: 'Votos Presidenciales',
+      registros: 8,
+      fechaCarga: '2024-01-14',
+      tamaño: '1.1 MB',
+      estado: 'Cargado',
+      formato: 'CSV',
+      descripcion: 'Información de candidatos a presidencia y vicepresidencia'
+    },
+  ]);
   const [dragActive, setDragActive] = useState(false);
 
   const handleDrag = (e) => {
@@ -36,9 +48,11 @@ const CargaDatos = () => {
     const newFiles = Array.from(files).map((file, index) => ({
       id: Date.now() + index,
       name: file.name,
-      size: (file.size / 1024).toFixed(2) + ' KB',
+      size: (file.size / 1024 / 1024).toFixed(2) + ' MB',
       status: 'processing',
-      progress: 0
+      progress: 0,
+      tipo: getFileType(file.name),
+      registros: Math.floor(Math.random() * 100000) + 1000
     }));
 
     setUploadedFiles([...uploadedFiles, ...newFiles]);
@@ -49,12 +63,67 @@ const CargaDatos = () => {
         setUploadedFiles(prev => prev.map(f => 
           f.id === file.id ? { ...f, status: 'success', progress: 100 } : f
         ));
+        
+        // Agregar a datasets después del procesamiento
+        setTimeout(() => {
+          const nuevoDataset = {
+            id: Date.now() + index + 1000,
+            nombre: file.name.replace(/\.[^/.]+$/, ""), // Remover extensión
+            tipo: file.tipo,
+            registros: file.registros,
+            fechaCarga: new Date().toISOString().split('T')[0],
+            tamaño: file.size,
+            estado: 'Cargado',
+            formato: file.name.split('.').pop().toUpperCase(),
+            descripcion: `Dataset cargado desde ${file.name}`
+          };
+          setDatasets(prev => [nuevoDataset, ...prev]);
+        }, 500);
       }, 2000 + (index * 500));
     });
   };
 
+  const getFileType = (filename) => {
+    if (filename.toLowerCase().includes('votante') || filename.toLowerCase().includes('padron')) {
+      return 'Votantes';
+    } else if (filename.toLowerCase().includes('candidato')) {
+      return 'Candidatos';
+    } else if (filename.toLowerCase().includes('resultado')) {
+      return 'Resultados';
+    } else {
+      return 'General';
+    }
+  };
+
   const removeFile = (id) => {
     setUploadedFiles(uploadedFiles.filter(f => f.id !== id));
+  };
+
+  const deleteDataset = (id) => {
+    setDatasets(datasets.filter(dataset => dataset.id !== id));
+  };
+
+  const getEstadoColor = (estado) => {
+    switch (estado) {
+      case 'Cargado': return 'bg-green-100 text-green-800';
+      case 'En Proceso': return 'bg-yellow-100 text-yellow-800';
+      case 'Error': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getTipoIcon = (tipo) => {
+    switch (tipo) {
+      case 'Votantes': return <Users className="text-blue-600" size={20} />;
+      case 'Candidatos': return <Users className="text-purple-600" size={20} />;
+      case 'Resultados': return <BarChart className="text-green-600" size={20} />;
+      default: return <Database className="text-gray-600" size={20} />;
+    }
+  };
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('es-ES', options);
   };
 
   return (
@@ -107,7 +176,7 @@ const CargaDatos = () => {
         {/* Archivos Cargados */}
         {uploadedFiles.length > 0 && (
           <div>
-            <h4 className="text-md font-bold text-gray-800 mb-3">Archivos Cargados</h4>
+            <h4 className="text-md font-bold text-gray-800 mb-3">Archivos en Proceso</h4>
             <div className="space-y-3">
               {uploadedFiles.map((file) => (
                 <div key={file.id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
@@ -141,7 +210,92 @@ const CargaDatos = () => {
           </div>
         )}
       </div>
+
+      {/* SECCIÓN DE DATASETS CARGADOS - ADAPTADA DEL CÓDIGO ANTERIOR */}
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h3 className="text-2xl font-bold text-gray-800">Datasets Cargados</h3>
+            <p className="text-sm text-gray-600">Gestione y visualice todos los datasets del sistema</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-600">{datasets.length} datasets</span>
+          </div>
+        </div>
+
+        {/* Lista de Datasets en formato de tabla/listado */}
+        {datasets.length === 0 ? (
+          <div className="text-center py-12">
+            <Database size={64} className="mx-auto text-gray-300 mb-4" />
+            <h3 className="text-lg font-bold text-gray-600 mb-2">No hay datasets cargados</h3>
+            <p className="text-gray-500">Comienza cargando archivos en la sección superior</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {datasets.map((dataset) => (
+              <div key={dataset.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors group">
+                <div className="flex items-start gap-4 flex-1">
+                  <div className={`p-2 rounded-lg ${
+                    dataset.formato === 'CSV' 
+                      ? 'bg-blue-100 text-blue-600' 
+                      : dataset.formato === 'XLSX'
+                      ? 'bg-green-100 text-green-600'
+                      : 'bg-purple-100 text-purple-600'
+                  }`}>
+                    <File size={20} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <p className="font-medium text-gray-800 text-lg">{dataset.nombre}</p>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getEstadoColor(dataset.estado)}`}>
+                        {dataset.estado}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600 mb-2">{dataset.descripcion}</p>
+                    <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <BarChart size={14} />
+                        {dataset.registros.toLocaleString()} filas
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Database size={14} />
+                        {dataset.tamaño}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Calendar size={14} />
+                        {formatDate(dataset.fechaCarga)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline" className="mr-2">
+                    {dataset.formato}
+                  </Badge>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
+  );
+};
+
+// Componente Badge para estilos consistentes
+const Badge = ({ variant = 'default', className = '', children }) => {
+  const baseStyles = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium';
+  
+  const variants = {
+    default: 'bg-gray-100 text-gray-800',
+    outline: 'border border-gray-300 text-gray-700 bg-white'
+  };
+
+  return (
+    <span className={`${baseStyles} ${variants[variant]} ${className}`}>
+      {children}
+    </span>
   );
 };
 

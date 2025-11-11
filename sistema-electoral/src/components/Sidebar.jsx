@@ -16,7 +16,6 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen 
       title: 'Gestión Electoral',
       items: [
         { id: 'candidatos', name: 'Candidatos', icon: UserCheck },
-        { id: 'resultados', name: 'Resultados', icon: BarChart3 },
       ]
     },
     {
