@@ -1,10 +1,11 @@
+// sistema-electoral/src/components/Sidebar.jsx
 import { 
   BarChart3, Database, FileUp, Settings, Users, TrendingUp, 
   LogOut, Menu, X, Vote, UserCheck, Building2, MapPinned,
   FileText, ShieldCheck, ClipboardList, Home, Zap
 } from 'lucide-react';
 
-const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen }) => {
+const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen, onLogout }) => {
   const menuSections = [
     {
       title: 'General',
@@ -16,6 +17,7 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen 
       title: 'Gestión Electoral',
       items: [
         { id: 'candidatos', name: 'Candidatos', icon: UserCheck },
+        { id: 'resultados', name: 'Resultados', icon: BarChart3 },
       ]
     },
     {
@@ -23,7 +25,7 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen 
       items: [
         { id: 'datos', name: 'Gestión de Datos', icon: Database },
         { id: 'carga', name: 'Importar Datos', icon: FileUp },
-        { id: 'limpieza', name: 'Deteccion de Fraudes', icon: Settings },
+        { id: 'limpieza', name: 'Detección de Fraudes', icon: Settings },
         { id: 'analisis', name: 'Análisis Estadístico', icon: TrendingUp },
         { id: 'visualizacion', name: 'Visualización', icon: BarChart3 },
       ]
@@ -159,10 +161,13 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen 
         ))}
       </nav>
 
-      {/* User Section */}
+      {/* Logout Section */}
       <div className="relative p-4 border-t border-white border-opacity-10">
-        <button className="w-full flex items-center gap-3 px-4 py-3 text-indigo-200 hover:bg-white hover:bg-opacity-10 rounded-xl transition-all group">
-          <LogOut size={20} className="group-hover:scale-110 transition-transform" />
+        <button 
+          onClick={onLogout}
+          className="w-full flex items-center gap-3 px-4 py-3 text-indigo-200 hover:bg-red-500 hover:bg-opacity-20 rounded-xl transition-all group"
+        >
+          <LogOut size={20} className="group-hover:scale-110 transition-transform text-red-300" />
           {sidebarOpen && <span className="text-sm font-medium">Cerrar Sesión</span>}
         </button>
       </div>
