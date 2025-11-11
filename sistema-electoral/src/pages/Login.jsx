@@ -19,10 +19,6 @@ const Login = ({ onLoginSuccess }) => {
         if (loginData.username === 'admin' && loginData.password === 'admin123') {
             setSuccess(true);
             setTimeout(() => {
-                // Guardar sesión en localStorage (opcional)
-                localStorage.setItem('isAuthenticated', 'true');
-                localStorage.setItem('userRole', 'admin');
-
                 // Llamar callback de login exitoso
                 onLoginSuccess();
             }, 1000);
@@ -131,12 +127,6 @@ const Login = ({ onLoginSuccess }) => {
                             Iniciar Sesión
                         </button>
                     </form>
-
-                    <div className="mt-6 text-center">
-                        <a href="/" className="text-sm text-indigo-600 hover:text-indigo-800 font-medium">
-                            ← Volver a la página principal
-                        </a>
-                    </div>
                 </div>
 
                 {/* Footer del modal */}
@@ -148,29 +138,29 @@ const Login = ({ onLoginSuccess }) => {
             </div>
 
             <style jsx>{`
-        @keyframes blob {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-        }
-        .animate-blob {
-          animation: blob 7s infinite;
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-          20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-        .animate-shake {
-          animation: shake 0.5s;
-        }
-      `}</style>
+                @keyframes blob {
+                    0%, 100% { transform: translate(0, 0) scale(1); }
+                    33% { transform: translate(30px, -50px) scale(1.1); }
+                    66% { transform: translate(-20px, 20px) scale(0.9); }
+                }
+                .animate-blob {
+                    animation: blob 7s infinite;
+                }
+                .animation-delay-2000 {
+                    animation-delay: 2s;
+                }
+                .animation-delay-4000 {
+                    animation-delay: 4s;
+                }
+                @keyframes shake {
+                    0%, 100% { transform: translateX(0); }
+                    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                    20%, 40%, 60%, 80% { transform: translateX(5px); }
+                }
+                .animate-shake {
+                    animation: shake 0.5s;
+                }
+            `}</style>
         </div>
     );
 };
