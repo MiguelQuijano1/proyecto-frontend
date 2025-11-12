@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Search, Filter, Download, Trash2, Edit, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
+import { containerVariants, itemVariants } from '../animations';
 
 const GestionDatos = () => {
   const [activeTab, setActiveTab] = useState('presidencial');
@@ -155,21 +157,34 @@ const GestionDatos = () => {
   );
 
   return (
-    <div className="space-y-6 p-6 bg-gray-50 min-h-screen">
+    <motion.div 
+      className="space-y-6 p-6 bg-gray-50 min-h-screen"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       {/* Título y pestañas */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+      <motion.div 
+        variants={itemVariants}
+        className="bg-white rounded-xl shadow-sm border border-gray-200 p-6"
+      >
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold text-gray-800">Registro de Votantes por Nivel Electoral</h2>
-          <button 
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={cargarVotantes}
             className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
           >
             <RefreshCw size={18} />
             Actualizar
-          </button>
+          </motion.button>
         </div>
         
-        <div className="flex flex-wrap gap-2 border-b border-gray-200">
+        <motion.div 
+          className="flex flex-wrap gap-2 border-b border-gray-200"
+          variants={containerVariants}
+        >
           <button
             onClick={() => { setActiveTab('presidencial'); setSelectedRows([]); setSearchTerm(''); }}
             className={`px-6 py-3 font-medium text-sm border-b-2 transition-all ${
@@ -200,11 +215,14 @@ const GestionDatos = () => {
           >
             Distrital
           </button>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Estadísticas Rápidas */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <motion.div 
+        className="grid grid-cols-1 md:grid-cols-4 gap-4"
+        variants={containerVariants}
+      >
         <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
           <p className="text-sm text-gray-600">Total Votantes</p>
           <p className="text-3xl font-bold text-gray-800">{todosLosVotantes.length}</p>
@@ -225,10 +243,13 @@ const GestionDatos = () => {
           <p className="text-sm text-gray-600">Seleccionados</p>
           <p className="text-3xl font-bold text-indigo-600">{selectedRows.length}</p>
         </div>
-      </div>
+      </motion.div>
 
       {/* Tabla Principal */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <motion.div 
+        variants={itemVariants}
+        className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
+      >
         <div className="p-6 border-b border-gray-200">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <h3 className="text-lg font-bold text-gray-800">
@@ -356,8 +377,8 @@ const GestionDatos = () => {
             <button className="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-white transition-colors">Siguiente</button>
           </div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

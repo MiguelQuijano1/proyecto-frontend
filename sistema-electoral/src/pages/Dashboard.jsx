@@ -1,6 +1,27 @@
+import { motion } from 'framer-motion';
 import { Users, FileText, TrendingUp, CheckCircle, AlertCircle, Zap, Activity, ArrowUp, ArrowDown } from 'lucide-react';
 
 const Dashboard = () => {
+  // Variantes de animación
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: 'spring', stiffness: 100 },
+    },
+  };
   const stats = [
     {
       title: 'Total Votantes',
@@ -55,38 +76,58 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <motion.div 
+      className="space-y-6"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       {/* Bienvenida con efecto hero */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-8 shadow-2xl">
-        <div className="absolute inset-0 bg-grid-white/10"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
-        
-        <div className="relative z-10">
-          <div className="flex items-center gap-3 mb-4">
-            <Zap className="text-yellow-300 animate-pulse" size={32} />
+<motion.div 
+    variants={itemVariants}
+    className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-600 via-slate-700 to-slate-800 p-8 shadow-2xl"
+>
+    <div className="absolute inset-0 bg-grid-white/10"></div>
+    <motion.div 
+        className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"
+        animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
+        transition={{ duration: 4, repeat: Infinity }}
+    ></motion.div>
+    <motion.div 
+        className="absolute bottom-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"
+        animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
+        transition={{ duration: 4, repeat: Infinity, delay: 2 }}
+    ></motion.div>
+    
+    <div className="relative z-10">
+        <div className="flex items-center gap-3 mb-4">
+            <Zap className="text-slate-200 animate-pulse" size={32} />
             <h1 className="text-3xl font-bold text-white">¡Bienvenido al Sistema Electoral!</h1>
-          </div>
-          <p className="text-white/90 text-lg max-w-2xl">
-            Gestiona todo el proceso electoral de manera eficiente y transparente. Sistema actualizado en tiempo real.
-          </p>
-          <div className="flex items-center gap-4 mt-6">
-            <button className="px-6 py-3 bg-white/20 backdrop-blur-sm text-white rounded-xl font-semibold hover:bg-white/30 transition-colors">
-              Documentación
-            </button>
-          </div>
         </div>
-      </div>
+        <p className="text-white/90 text-lg max-w-2xl">
+            Gestiona todo el proceso electoral de manera eficiente y transparente. Sistema actualizado en tiempo real.
+        </p>
+        <div className="flex items-center gap-4 mt-6">
+            <button className="px-6 py-3 bg-white/20 backdrop-blur-sm text-white rounded-xl font-semibold hover:bg-white/30 transition-colors">
+                Documentación
+            </button>
+        </div>
+    </div>
+</motion.div>
 
       {/* Stats Cards Mejoradas */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <motion.div 
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+        variants={containerVariants}
+      >
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <div 
-              key={index} 
-              className="group relative bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden"
-              style={{animationDelay: `${index * 100}ms`}}
+            <motion.div 
+              key={index}
+              variants={itemVariants}
+              whileHover={{ y: -8, scale: 1.02 }}
+              className="group relative bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
             >
               {/* Efecto de brillo en hover */}
               <div className="absolute inset-0 bg-gradient-to-br from-white to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -118,15 +159,21 @@ const Dashboard = () => {
               <div className="mt-4 h-1 bg-slate-100 rounded-full overflow-hidden">
                 <div className={`h-full bg-gradient-to-r ${stat.gradient} rounded-full`} style={{width: '70%'}}></div>
               </div>
-            </div>
+            </motion.div>
           );
         })}
-      </div>
+      </motion.div>
 
       {/* Gráficos y Actividad */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <motion.div 
+        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        variants={containerVariants}
+      >
         {/* Calidad de Datos - Mejorado */}
-        <div className="lg:col-span-2 glass-effect rounded-2xl p-6 shadow-xl">
+        <motion.div 
+          variants={itemVariants}
+          className="lg:col-span-2 glass-effect rounded-2xl p-6 shadow-xl"
+        >
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-indigo-600 bg-clip-text text-transparent">
               Calidad de Datos
@@ -136,7 +183,11 @@ const Dashboard = () => {
           
           <div className="space-y-5">
             {qualityMetrics.map((metric, index) => (
-              <div key={index} className="group">
+              <motion.div 
+                key={index} 
+                variants={itemVariants}
+                className="group"
+              >
                 <div className="flex justify-between mb-2">
                   <span className="text-sm font-semibold text-slate-700">{metric.label}</span>
                   <span className="text-sm font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
@@ -153,12 +204,15 @@ const Dashboard = () => {
                   {/* Efecto de brillo */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 
           {/* Indicador general */}
-          <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200">
+          <motion.div 
+            variants={itemVariants}
+            className="mt-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200"
+          >
             <div className="flex items-center gap-3">
               <CheckCircle className="text-green-600" size={24} />
               <div>
@@ -166,18 +220,23 @@ const Dashboard = () => {
                 <p className="text-sm text-green-700">Todos los indicadores dentro de rangos óptimos</p>
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Actividad Reciente - Mejorada */}
-        <div className="glass-effect rounded-2xl p-6 shadow-xl">
+        <motion.div 
+          variants={itemVariants}
+          className="glass-effect rounded-2xl p-6 shadow-xl"
+        >
           <h3 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-indigo-600 bg-clip-text text-transparent mb-6">
             Actividad Reciente
           </h3>
-          <div className="space-y-4">
+          <motion.div className="space-y-4" variants={containerVariants}>
             {recentActivity.map((activity) => (
-              <div 
-                key={activity.id} 
+              <motion.div 
+                key={activity.id}
+                variants={itemVariants}
+                whileHover={{ x: 8 }}
                 className="flex items-start gap-3 p-3 rounded-xl hover:bg-white/50 transition-all group cursor-pointer"
               >
                 <div className="text-2xl group-hover:scale-110 transition-transform">
@@ -192,23 +251,33 @@ const Dashboard = () => {
                 <div className={`w-2 h-2 rounded-full ${
                   activity.status === 'success' ? 'bg-green-500' : 'bg-yellow-500'
                 } group-hover:scale-150 transition-transform`}></div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
           <button className="mt-4 w-full py-2.5 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 rounded-xl transition-colors">
             Ver todo el historial →
           </button>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Alertas del Sistema - Mejoradas */}
-      <div className="glass-effect rounded-2xl p-6 shadow-xl">
+      <motion.div 
+        variants={itemVariants}
+        className="glass-effect rounded-2xl p-6 shadow-xl"
+      >
         <h3 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-indigo-600 bg-clip-text text-transparent mb-6">
           Alertas del Sistema
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="group relative overflow-hidden p-5 bg-gradient-to-br from-yellow-50 to-orange-50 border-2 border-yellow-200 rounded-xl hover:shadow-lg transition-all">
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 gap-4"
+          variants={containerVariants}
+        >
+          <motion.div 
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+            className="group relative overflow-hidden p-5 bg-gradient-to-br from-yellow-50 to-orange-50 border-2 border-yellow-200 rounded-xl hover:shadow-lg transition-all"
+          >
             <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-200/30 rounded-full blur-2xl"></div>
             <div className="relative flex items-start gap-4">
               <div className="p-3 bg-yellow-500 rounded-xl group-hover:rotate-12 transition-transform">
@@ -222,9 +291,13 @@ const Dashboard = () => {
                 </button>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="group relative overflow-hidden p-5 bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl hover:shadow-lg transition-all">
+          <motion.div 
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+            className="group relative overflow-hidden p-5 bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl hover:shadow-lg transition-all"
+          >
             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-200/30 rounded-full blur-2xl"></div>
             <div className="relative flex items-start gap-4">
               <div className="p-3 bg-blue-500 rounded-xl group-hover:rotate-12 transition-transform">
@@ -238,30 +311,41 @@ const Dashboard = () => {
                 </button>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <motion.div 
+        className="grid grid-cols-1 md:grid-cols-3 gap-4"
+        variants={containerVariants}
+      >
         {[
-          { title: 'Nuevo Registro', icon: '➕', color: 'from-green-500 to-emerald-500' },
-          { title: 'Generar Reporte', icon: '📊', color: 'from-blue-500 to-cyan-500' },
-          { title: 'Ver Estadísticas', icon: '📈', color: 'from-purple-500 to-pink-500' },
+          { title: 'Nuevo Registro', icon: '➕', color: 'from-green-300 to-emerald-300' },
+          { title: 'Generar Reporte', icon: '📊', color: 'from-blue-300 to-cyan-300' },
+          { title: 'Ver Estadísticas', icon: '📈', color: 'from-purple-300 to-pink-300' },
         ].map((action, index) => (
-          <button
+          <motion.button
             key={index}
-            className={`group relative overflow-hidden p-6 bg-gradient-to-br ${action.color} rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300`}
+            variants={itemVariants}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+            className={`group relative overflow-hidden p-6 bg-gradient-to-br ${action.color} rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300`}
           >
             <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
             <div className="relative flex items-center gap-4">
-              <span className="text-4xl group-hover:scale-110 transition-transform">{action.icon}</span>
+              <motion.span 
+                className="text-4xl"
+                whileHover={{ scale: 1.3, rotate: 10 }}
+              >
+                {action.icon}
+              </motion.span>
               <span className="text-xl font-bold text-white">{action.title}</span>
             </div>
-          </button>
+          </motion.button>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

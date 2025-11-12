@@ -1,4 +1,5 @@
 // sistema-electoral/src/components/Sidebar.jsx
+import { motion } from 'framer-motion';
 import { 
   BarChart3, Database, FileUp, Settings, Users, TrendingUp, 
   LogOut, Menu, X, Vote, UserCheck, Building2, MapPinned,
@@ -58,77 +59,82 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen,
   ];
 
   return (
-    <aside 
+    <motion.aside 
+      initial={{ x: -300 }}
+      animate={{ x: 0 }}
+      transition={{ type: 'spring', stiffness: 100 }}
       className={`${sidebarOpen ? 'w-72' : 'w-20'} transition-all duration-300 flex flex-col relative overflow-hidden`}
       style={{
-        background: 'linear-gradient(180deg, #0f172a 0%, #312e81 50%, #581c87 100%)'
+        background: 'linear-gradient(180deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%)'
       }}
     >
-      {/* Efectos de fondo animados */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none">
+      {/* Efectos de fondo sutiles */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none">
         <div 
-          className="absolute top-0 left-0 rounded-full animate-pulse"
+          className="absolute top-0 left-0 rounded-full"
           style={{
             width: '288px',
             height: '288px',
-            background: '#6366f1',
-            filter: 'blur(80px)'
+            background: '#64748b',
+            filter: 'blur(60px)'
           }}
         />
         <div 
-          className="absolute bottom-0 right-0 rounded-full animate-pulse"
+          className="absolute bottom-0 right-0 rounded-full"
           style={{
             width: '288px',
             height: '288px',
-            background: '#a855f7',
-            filter: 'blur(80px)',
-            animationDelay: '1s'
+            background: '#94a3b8',
+            filter: 'blur(60px)'
           }}
         />
       </div>
 
       {/* Header del Sidebar */}
-      <div className="relative p-5 flex items-center justify-between border-b border-white border-opacity-10">
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="relative p-5 flex items-center justify-between border-b border-gray-200"
+      >
         {sidebarOpen && (
           <div className="flex items-center gap-3">
             <div 
-              className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
+              className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm"
               style={{
-                background: 'linear-gradient(135deg, #818cf8 0%, #a855f7 100%)'
+                background: 'linear-gradient(135deg, #475569 0%, #64748b 100%)'
               }}
             >
               <Zap className="text-white" size={20} />
             </div>
             <div>
-              <h1 
-                className="text-xl font-bold"
-                style={{
-                  background: 'linear-gradient(90deg, #ffffff 0%, #c7d2fe 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text'
-                }}
-              >
+              <h1 className="text-xl font-bold text-slate-800">
                 ONPE
               </h1>
-              <p className="text-xs text-indigo-300">Sistema Electoral</p>
+              <p className="text-xs text-slate-500">Sistema Electoral</p>
             </div>
           </div>
         )}
         <button 
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="p-2 hover:bg-white hover:bg-opacity-10 rounded-lg transition-all duration-200 text-white"
+          className="p-2 hover:bg-gray-200 rounded-lg transition-all duration-200 text-slate-600"
         >
           {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
-      </div>
+      </motion.div>
 
       {/* Menú de Navegación */}
       <nav className="relative flex-1 p-4 overflow-y-auto custom-scrollbar">
         {menuSections.map((section, idx) => (
-          <div key={idx} className="mb-6">
+          <motion.div 
+            key={idx} 
+            className="mb-6"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 + idx * 0.05 }}
+          >
             {sidebarOpen && (
-              <h3 className="text-xs font-semibold text-indigo-300 uppercase mb-3 px-3 tracking-wider">
+              <h3 className="text-xs font-semibold text-slate-500 uppercase mb-3 px-3 tracking-wider">
                 {section.title}
               </h3>
             )}
@@ -137,60 +143,63 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen,
                 const Icon = item.icon;
                 const isActive = activeSection === item.id;
                 return (
-                  <li key={item.id}>
+                  <motion.li 
+                    key={item.id}
+                    whileHover={{ x: 4 }}
+                  >
                     <button
                       onClick={() => setActiveSection(item.id)}
                       className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group relative overflow-hidden ${
                         isActive
-                          ? 'text-white shadow-lg'
-                          : 'text-indigo-200 hover:bg-white hover:bg-opacity-10 hover:text-white'
+                          ? 'text-white shadow-sm'
+                          : 'text-slate-600 hover:bg-gray-200 hover:text-slate-800'
                       }`}
                       style={isActive ? {
-                        background: 'linear-gradient(90deg, #6366f1 0%, #a855f7 100%)',
-                        boxShadow: '0 10px 15px -3px rgba(99, 102, 241, 0.5)'
+                        background: 'linear-gradient(90deg, #475569 0%, #64748b 100%)',
+                        boxShadow: '0 4px 6px -1px rgba(71, 85, 105, 0.2)'
                       } : {}}
                       title={!sidebarOpen ? item.name : ''}
                     >
                       {isActive && (
                         <div 
-                          className="absolute inset-0 animate-pulse"
+                          className="absolute inset-0"
                           style={{
-                            background: 'linear-gradient(90deg, rgba(255,255,255,0.2) 0%, transparent 100%)'
+                            background: 'linear-gradient(90deg, rgba(255,255,255,0.1) 0%, transparent 100%)'
                           }}
                         />
                       )}
                       <Icon 
                         size={20} 
-                        className={`relative z-10 ${isActive ? 'animate-pulse' : 'group-hover:scale-110 transition-transform'}`} 
+                        className={`relative z-10 ${isActive ? '' : 'group-hover:scale-105 transition-transform'}`} 
                       />
                       {sidebarOpen && (
                         <span className="text-sm font-medium relative z-10">{item.name}</span>
                       )}
                       {isActive && (
                         <div 
-                          className="absolute right-0 w-1 h-8 bg-white rounded-l-full"
+                          className="absolute right-0 w-1 h-8 bg-slate-100 rounded-l-full"
                         />
                       )}
                     </button>
-                  </li>
+                  </motion.li>
                 );
               })}
             </ul>
-          </div>
+          </motion.div>
         ))}
       </nav>
 
       {/* Logout Section */}
-      <div className="relative p-4 border-t border-white border-opacity-10">
+      <div className="relative p-4 border-t border-gray-200">
         <button 
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-3 text-indigo-200 hover:bg-red-500 hover:bg-opacity-20 rounded-xl transition-all group"
+          className="w-full flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-red-100 hover:text-red-600 rounded-xl transition-all group"
         >
-          <LogOut size={20} className="group-hover:scale-110 transition-transform text-red-300" />
+          <LogOut size={20} className="group-hover:scale-105 transition-transform" />
           {sidebarOpen && <span className="text-sm font-medium">Cerrar Sesión</span>}
         </button>
       </div>
-    </aside>
+    </motion.aside>
   );
 };
 

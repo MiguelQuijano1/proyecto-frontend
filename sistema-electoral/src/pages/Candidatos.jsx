@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { UserPlus, Search, Filter, Edit, Trash2, Eye, Award, Users, TrendingUp, X, FileText, CheckCircle, Clock, Trophy } from 'lucide-react';
+import { containerVariants, itemVariants } from '../animations';
 
 const Candidatos = () => {
   const [showModal, setShowModal] = useState(false);
@@ -262,9 +264,17 @@ const Candidatos = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <motion.div 
+      className="space-y-6"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       {/* Header Hero */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-8 shadow-2xl">
+      <motion.div 
+        variants={itemVariants}
+        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-600 via-slate-700 to-slate-800 p-8 shadow-2xl"
+      >
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
         <div className="relative z-10 flex items-center justify-between">
           <div>
@@ -272,14 +282,22 @@ const Candidatos = () => {
             <p className="text-white/90">Administra y supervisa todos los candidatos electorales</p>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Estadísticas */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <motion.div 
+        className="grid grid-cols-1 md:grid-cols-4 gap-4"
+        variants={containerVariants}
+      >
         {estadisticas.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <div key={index} className="glass-effect rounded-2xl p-6 hover:shadow-xl transition-all hover:-translate-y-1 group">
+            <motion.div 
+              key={index}
+              variants={itemVariants}
+              whileHover={{ y: -5 }}
+              className="glass-effect rounded-2xl p-6 hover:shadow-xl transition-all"
+            >
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-slate-600 mb-1">{stat.label}</p>
@@ -291,18 +309,26 @@ const Candidatos = () => {
                   <Icon className="text-white" size={24} />
                 </div>
               </div>
-            </div>
+            </motion.div>
           );
         })}
-      </div>
+      </motion.div>
 
       {/* Filtros por Tipo */}
-      <div className="glass-effect p-6 rounded-2xl shadow-xl">
+      <motion.div 
+        variants={itemVariants}
+        className="glass-effect p-6 rounded-2xl shadow-xl"
+      >
         <h3 className="text-lg font-bold text-slate-800 mb-4">Filtrar por Tipo de Candidatura</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <motion.div 
+          className="grid grid-cols-2 md:grid-cols-4 gap-3"
+          variants={containerVariants}
+        >
           {tiposFiltro.map((tipo) => (
-            <button
+            <motion.button
               key={tipo.id}
+              variants={itemVariants}
+              whileHover={{ scale: 1.05 }}
               onClick={() => setFiltroTipo(tipo.id)}
               className={`p-4 rounded-xl border-2 transition-all ${
                 filtroTipo === tipo.id
@@ -314,13 +340,16 @@ const Candidatos = () => {
                 <p className="font-semibold text-slate-800">{tipo.label}</p>
                 <p className="text-2xl font-bold text-indigo-600 mt-1">{tipo.count}</p>
               </div>
-            </button>
+            </motion.button>
           ))}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Barra de Búsqueda */}
-      <div className="glass-effect p-6 rounded-2xl shadow-xl">
+      <motion.div 
+        variants={itemVariants}
+        className="glass-effect p-6 rounded-2xl shadow-xl"
+      >
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex items-center gap-3 flex-1">
             <div className="relative flex-1">
@@ -342,24 +371,32 @@ const Candidatos = () => {
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Contador de resultados */}
-      <div className="flex items-center justify-between">
+      <motion.div 
+        variants={itemVariants}
+        className="flex items-center justify-between"
+      >
         <h3 className="text-lg font-bold text-slate-800">
           {filtroTipo === 'todos' ? 'Todos los Candidatos' : 
            filtroTipo === 'presidencial' ? 'Candidatos Presidenciales' :
            filtroTipo === 'regional' ? 'Candidatos Regionales' : 'Candidatos Distritales'}
           <span className="text-indigo-600 ml-2">({candidatosFiltrados.length})</span>
         </h3>
-      </div>
+      </motion.div>
 
       {/* Grid de Candidatos Mejorado */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <motion.div 
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        variants={containerVariants}
+      >
         {candidatosFiltrados.map((candidato, index) => (
-          <div 
-            key={candidato.id} 
-            className="group relative glass-effect rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+          <motion.div 
+            key={candidato.id}
+            variants={itemVariants}
+            whileHover={{ y: -8 }}
+            className="group relative glass-effect rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300"
           >
             {/* Badge de tipo */}
             <div className="absolute top-4 left-4 z-20">
@@ -453,23 +490,30 @@ const Candidatos = () => {
                   Ver Propuestas
                 </button>
               </div>
-            </div>
-          </div>
-        ))}
-      </div>
+              </div>
+            </motion.div>
+          ))}
+      </motion.div>
 
       {/* Mensaje cuando no hay resultados */}
       {candidatosFiltrados.length === 0 && (
-        <div className="text-center py-12 glass-effect rounded-2xl">
+        <motion.div 
+          variants={itemVariants}
+          className="text-center py-12 glass-effect rounded-2xl"
+        >
           <Users size={64} className="mx-auto text-slate-300 mb-4" />
           <h3 className="text-xl font-bold text-slate-600 mb-2">No se encontraron candidatos</h3>
           <p className="text-slate-500">Intenta con otros términos de búsqueda o cambia el filtro</p>
-        </div>
+        </motion.div>
       )}
 
       {/* Modal de Propuestas (se mantiene igual) */}
       {showModal && modalType === 'propuestas' && candidatoSeleccionado && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+        >
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
             {/* Header del Modal */}
             <div className={`bg-gradient-to-r ${candidatoSeleccionado.color} p-6 text-white relative`}>
@@ -549,9 +593,9 @@ const Candidatos = () => {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Download, Settings, Maximize2, RefreshCw } from 'lucide-react';
 
@@ -48,10 +49,31 @@ const Visualizacion = () => {
     { id: 'comparativo', name: 'Comparativo', icon: '📉' },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } },
+  };
+
   return (
-    <div className="space-y-6">
+    <motion.div 
+      className="space-y-6"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       {/* Selector de Tipo de Gráfico */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <motion.div 
+        variants={itemVariants}
+        className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+      >
         <h3 className="text-lg font-bold text-gray-800 mb-4">Tipo de Visualización</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {chartTypes.map((chart) => (
@@ -69,10 +91,13 @@ const Visualizacion = () => {
             </button>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       {/* Controles de Visualización */}
-      <div className="flex items-center justify-between bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+      <motion.div 
+        variants={itemVariants}
+        className="flex items-center justify-between bg-white p-4 rounded-xl shadow-sm border border-gray-200"
+      >
         <div className="flex items-center gap-3">
           <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
             <RefreshCw size={18} />
@@ -85,11 +110,14 @@ const Visualizacion = () => {
             <span className="hidden md:inline">Exportar</span>
           </button>
         </div>
-      </div>
+      </motion.div>
 
       {/* Gráficos */}
       {activeChart === 'barras' && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <motion.div 
+          variants={containerVariants}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+        >
           {/* Gráfico de Barras - Edad */}
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
             <div className="flex items-center justify-between mb-4">
@@ -135,11 +163,14 @@ const Visualizacion = () => {
               </BarChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </motion.div>
       )}
 
       {activeChart === 'lineas' && (
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <motion.div 
+          variants={itemVariants}
+          className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+        >
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-bold text-gray-800">Tendencia de Registros Mensuales</h3>
             <div className="flex items-center gap-2">
@@ -174,7 +205,7 @@ const Visualizacion = () => {
               />
             </LineChart>
           </ResponsiveContainer>
-        </div>
+        </motion.div>
       )}
 
       {activeChart === 'pie' && (
@@ -299,7 +330,7 @@ const Visualizacion = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

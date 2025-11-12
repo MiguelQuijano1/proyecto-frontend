@@ -1,8 +1,22 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { TrendingUp, Calculator, BarChart2, PieChart, Activity } from 'lucide-react';
 
 const AnalisisEstadistico = () => {
   const [selectedAnalysis, setSelectedAnalysis] = useState('descriptivo');
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } },
+  };
 
   const estadisticas = {
     descriptivas: [
@@ -28,11 +42,22 @@ const AnalisisEstadistico = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <motion.div 
+      className="space-y-6"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       {/* Selector de Tipo de Análisis */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <motion.div 
+        variants={itemVariants}
+        className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+      >
         <h3 className="text-lg font-bold text-gray-800 mb-4">Tipo de Análisis</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-3 gap-4"
+          variants={containerVariants}
+        >
           <button
             onClick={() => setSelectedAnalysis('descriptivo')}
             className={`p-4 rounded-lg border-2 transition-all ${
@@ -41,9 +66,11 @@ const AnalisisEstadistico = () => {
                 : 'border-gray-200 hover:border-indigo-300'
             }`}
           >
-            <Calculator className={`mx-auto mb-2 ${
-              selectedAnalysis === 'descriptivo' ? 'text-indigo-600' : 'text-gray-400'
-            }`} size={32} />
+            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+              <Calculator className={`mx-auto mb-2 ${
+                selectedAnalysis === 'descriptivo' ? 'text-indigo-600' : 'text-gray-400'
+              }`} size={32} />
+            </motion.div>
             <p className="font-medium text-gray-800">Análisis Descriptivo</p>
             <p className="text-xs text-gray-600 mt-1">Estadísticas básicas</p>
           </button>
@@ -56,9 +83,11 @@ const AnalisisEstadistico = () => {
                 : 'border-gray-200 hover:border-indigo-300'
             }`}
           >
-            <TrendingUp className={`mx-auto mb-2 ${
-              selectedAnalysis === 'inferencial' ? 'text-indigo-600' : 'text-gray-400'
-            }`} size={32} />
+            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+              <TrendingUp className={`mx-auto mb-2 ${
+                selectedAnalysis === 'inferencial' ? 'text-indigo-600' : 'text-gray-400'
+              }`} size={32} />
+            </motion.div>
             <p className="font-medium text-gray-800">Análisis Inferencial</p>
             <p className="text-xs text-gray-600 mt-1">Pruebas de hipótesis</p>
           </button>
@@ -71,39 +100,60 @@ const AnalisisEstadistico = () => {
                 : 'border-gray-200 hover:border-indigo-300'
             }`}
           >
-            <Activity className={`mx-auto mb-2 ${
-              selectedAnalysis === 'predictivo' ? 'text-indigo-600' : 'text-gray-400'
-            }`} size={32} />
+            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+              <Activity className={`mx-auto mb-2 ${
+                selectedAnalysis === 'predictivo' ? 'text-indigo-600' : 'text-gray-400'
+              }`} size={32} />
+            </motion.div>
             <p className="font-medium text-gray-800">Análisis Predictivo</p>
             <p className="text-xs text-gray-600 mt-1">Modelos y predicciones</p>
           </button>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Estadísticas Descriptivas */}
       {selectedAnalysis === 'descriptivo' && (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          variants={containerVariants}
+          className="space-y-6"
+        >
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-4 gap-4"
+            variants={containerVariants}
+          >
             {estadisticas.descriptivas.map((stat, index) => {
               const Icon = stat.icon;
               return (
-                <div key={index} className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <motion.div 
+                  key={index} 
+                  variants={itemVariants}
+                  whileHover={{ y: -5 }}
+                  className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+                >
                   <div className={`inline-flex p-3 bg-${stat.color}-100 rounded-lg mb-3`}>
                     <Icon className={`text-${stat.color}-600`} size={24} />
                   </div>
                   <p className="text-sm text-gray-600 mb-1">{stat.label}</p>
                   <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
-                </div>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
 
           {/* Distribución por Edad */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <motion.div 
+            variants={itemVariants}
+            className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+          >
             <h3 className="text-lg font-bold text-gray-800 mb-4">Distribución por Rango de Edad</h3>
             <div className="space-y-4">
               {estadisticas.distribucion.map((item, index) => (
-                <div key={index}>
+                <motion.div 
+                  key={index}
+                  variants={itemVariants}
+                >
                   <div className="flex justify-between mb-2">
                     <span className="text-sm font-medium text-gray-700">{item.rango} años</span>
                     <span className="text-sm text-gray-600">
@@ -111,62 +161,91 @@ const AnalisisEstadistico = () => {
                     </span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-3">
-                    <div
-                      className="bg-gradient-to-r from-indigo-500 to-purple-500 h-3 rounded-full transition-all duration-500"
-                      style={{ width: `${item.porcentaje * 2.5}%` }}
-                    ></div>
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${item.porcentaje * 2.5}%` }}
+                      transition={{ duration: 0.8, delay: 0.1 * index }}
+                      className="bg-gradient-to-r from-indigo-500 to-purple-500 h-3 rounded-full"
+                    ></motion.div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Distribución por Distrito */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <motion.div 
+            className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+            variants={containerVariants}
+          >
             <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
               <h3 className="text-lg font-bold text-gray-800 mb-4">Votantes por Distrito</h3>
               <div className="space-y-3">
                 {estadisticas.distritos.map((distrito, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <motion.div 
+                    key={index}
+                    variants={itemVariants}
+                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                  >
                     <div className="flex-1">
                       <p className="font-medium text-gray-800">{distrito.nombre}</p>
                       <p className="text-xs text-gray-600">{distrito.porcentaje}% del total</p>
                     </div>
-                    <p className="text-lg font-bold text-indigo-600">
+                    <motion.p 
+                      className="text-lg font-bold text-indigo-600"
+                      whileHover={{ scale: 1.1 }}
+                    >
                       {distrito.votantes.toLocaleString()}
-                    </p>
-                  </div>
+                    </motion.p>
+                  </motion.div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <motion.div 
+              variants={itemVariants}
+              className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+            >
               <h3 className="text-lg font-bold text-gray-800 mb-4">Resumen Estadístico</h3>
               <div className="space-y-4">
-                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <motion.div 
+                  whileHover={{ scale: 1.02 }}
+                  className="p-4 bg-blue-50 border border-blue-200 rounded-lg"
+                >
                   <p className="text-sm text-blue-800 font-medium">Coeficiente de Variación</p>
                   <p className="text-2xl font-bold text-blue-900 mt-1">31.95%</p>
                   <p className="text-xs text-blue-700 mt-1">Variabilidad moderada</p>
-                </div>
-                <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                </motion.div>
+                <motion.div 
+                  whileHover={{ scale: 1.02 }}
+                  className="p-4 bg-green-50 border border-green-200 rounded-lg"
+                >
                   <p className="text-sm text-green-800 font-medium">Asimetría</p>
                   <p className="text-2xl font-bold text-green-900 mt-1">0.35</p>
                   <p className="text-xs text-green-700 mt-1">Distribución ligeramente sesgada</p>
-                </div>
-                <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                </motion.div>
+                <motion.div 
+                  whileHover={{ scale: 1.02 }}
+                  className="p-4 bg-purple-50 border border-purple-200 rounded-lg"
+                >
                   <p className="text-sm text-purple-800 font-medium">Curtosis</p>
                   <p className="text-2xl font-bold text-purple-900 mt-1">-0.82</p>
                   <p className="text-xs text-purple-700 mt-1">Distribución platicúrtica</p>
-                </div>
+                </motion.div>
               </div>
-            </div>
-          </div>
-        </>
+            </motion.div>
+          </motion.div>
+        </motion.div>
       )}
 
       {/* Análisis Inferencial */}
       {selectedAnalysis === 'inferencial' && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <motion.div 
+          className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          variants={containerVariants}
+        >
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
             <h3 className="text-lg font-bold text-gray-800 mb-4">Pruebas de Hipótesis</h3>
             <div className="space-y-4">
@@ -245,12 +324,17 @@ const AnalisisEstadistico = () => {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
 
       {/* Análisis Predictivo */}
       {selectedAnalysis === 'predictivo' && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <motion.div 
+          className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          variants={containerVariants}
+        >
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
             <h3 className="text-lg font-bold text-gray-800 mb-4">Modelos de Predicción</h3>
             <div className="space-y-4">
@@ -361,9 +445,9 @@ const AnalisisEstadistico = () => {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

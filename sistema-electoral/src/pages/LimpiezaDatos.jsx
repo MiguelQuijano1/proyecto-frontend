@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { AlertTriangle, CheckCircle, Zap, RefreshCw, Database, Play, Filter, FileText, Search, Trash2, Edit, Calendar, Hash, User, Mail, Phone, MapPin, BarChart3, Copy, MinusCircle } from 'lucide-react';
 
 const LimpiezaDatos = () => {
@@ -8,6 +9,19 @@ const LimpiezaDatos = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [dataAnalyzed, setDataAnalyzed] = useState(false); // Nuevo estado para controlar si los datos han sido analizados
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } },
+  };
 
   const issues = [
     { id: 1, type: 'Duplicados', count: 245, severity: 'high', color: 'red' },
@@ -79,9 +93,17 @@ const LimpiezaDatos = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <motion.div 
+      className="space-y-6"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       {/* Botones de Acciones Principales */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <motion.div 
+        variants={itemVariants}
+        className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+      >
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-indigo-100 rounded-lg">
             <Zap className="text-indigo-600" size={24} />
@@ -96,10 +118,12 @@ const LimpiezaDatos = () => {
           {cleaningActions.map((action) => {
             const Icon = action.icon;
             return (
-              <button
+              <motion.button
                 key={action.id}
                 onClick={() => handleCleaningAction(action.id)}
                 disabled={isProcessing}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 className={`p-6 border-2 rounded-xl transition-all flex flex-col items-center justify-center gap-3 ${
                   completedSteps.includes(action.id)
                     ? 'border-green-500 bg-green-50'
@@ -130,15 +154,18 @@ const LimpiezaDatos = () => {
                 {completedSteps.includes(action.id) && (
                   <CheckCircle className="text-green-600" size={20} />
                 )}
-              </button>
+              </motion.button>
             );
           })}
         </div>
-      </div>
+      </motion.div>
 
       {/* Resumen de Problemas - Solo se muestra después de analizar los datos */}
       {dataAnalyzed && (
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <motion.div 
+          variants={itemVariants}
+          className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+        >
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 bg-amber-100 rounded-lg">
               <AlertTriangle className="text-amber-600" size={24} />
@@ -163,11 +190,14 @@ const LimpiezaDatos = () => {
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
       )}
 
       {/* Tabla de Datos */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+      <motion.div 
+        variants={itemVariants}
+        className="bg-white rounded-xl shadow-sm border border-gray-200"
+      >
         <div className="p-6 border-b border-gray-200">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-3">
@@ -258,7 +288,11 @@ const LimpiezaDatos = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredData.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-50">
+                <motion.tr 
+                  key={item.id} 
+                  variants={itemVariants}
+                  className="hover:bg-gray-50"
+                >
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{item.id}</td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <div>
@@ -275,7 +309,7 @@ const LimpiezaDatos = () => {
                   <td className="px-4 py-3 whitespace-nowrap">
                     {getStatusBadge(item.estado)}
                   </td>
-                </tr>
+                </motion.tr>
               ))}
             </tbody>
           </table>
@@ -295,11 +329,14 @@ const LimpiezaDatos = () => {
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Registro de Actividades - Solo se muestra después de analizar los datos */}
       {dataAnalyzed && (
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <motion.div 
+          variants={itemVariants}
+          className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+        >
           <h3 className="text-lg font-bold text-gray-800 mb-4">Registro de Limpieza</h3>
           <div className="space-y-3">
             <div className="flex items-start gap-3 p-3 bg-green-50 border border-green-200 rounded-lg">
@@ -324,9 +361,9 @@ const LimpiezaDatos = () => {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

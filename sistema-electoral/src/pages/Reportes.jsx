@@ -1,8 +1,22 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { FileText, Download, Calendar, Filter, Printer, Mail, Eye } from 'lucide-react';
 
 const Reportes = () => {
   const [filtroTipo, setFiltroTipo] = useState('todos');
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } },
+  };
 
   const reportesDisponibles = [
     {
@@ -80,24 +94,42 @@ const Reportes = () => {
     : reportesDisponibles.filter(r => r.tipo === filtroTipo);
 
   return (
-    <div className="space-y-6">
+    <motion.div 
+      className="space-y-6"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 rounded-xl shadow-lg text-white">
+      <motion.div 
+        variants={itemVariants}
+        className="bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800 p-6 rounded-xl shadow-lg text-white"
+      >
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold mb-2">Centro de Reportes</h2>
             <p className="text-sm opacity-90">Generación y descarga de informes del sistema electoral</p>
           </div>
-          <button className="flex items-center gap-2 px-6 py-3 bg-white text-indigo-600 rounded-lg hover:bg-gray-100 transition-colors font-medium">
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-2 px-6 py-3 bg-white text-indigo-600 rounded-lg hover:bg-gray-100 transition-colors font-medium"
+          >
             <FileText size={18} />
             Generar Nuevo Reporte
-          </button>
+          </motion.button>
         </div>
-      </div>
+      </motion.div>
 
       {/* Estadísticas de Reportes */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <motion.div 
+        className="grid grid-cols-1 md:grid-cols-4 gap-4"
+        variants={containerVariants}
+      >
+        <motion.div 
+          variants={itemVariants}
+          className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Total Reportes</p>
@@ -105,8 +137,11 @@ const Reportes = () => {
             </div>
             <FileText className="text-indigo-600" size={32} />
           </div>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        </motion.div>
+        <motion.div 
+          variants={itemVariants}
+          className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Generados Hoy</p>
@@ -114,8 +149,11 @@ const Reportes = () => {
             </div>
             <Calendar className="text-green-600" size={32} />
           </div>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        </motion.div>
+        <motion.div 
+          variants={itemVariants}
+          className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Descargas</p>
@@ -123,8 +161,11 @@ const Reportes = () => {
             </div>
             <Download className="text-blue-600" size={32} />
           </div>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        </motion.div>
+        <motion.div 
+          variants={itemVariants}
+          className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Programados</p>
@@ -132,11 +173,14 @@ const Reportes = () => {
             </div>
             <Calendar className="text-purple-600" size={32} />
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Filtros y Búsqueda */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <motion.div 
+        variants={itemVariants}
+        className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+      >
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">Buscar Reporte</label>
@@ -160,16 +204,21 @@ const Reportes = () => {
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Categorías de Reportes */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <motion.div 
+        variants={itemVariants}
+        className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+      >
         <h3 className="text-lg font-bold text-gray-800 mb-4">Categorías</h3>
         <div className="flex flex-wrap gap-3">
           {tiposReporte.map((tipo) => (
-            <button
+            <motion.button
               key={tipo.id}
               onClick={() => setFiltroTipo(tipo.id)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 filtroTipo === tipo.id
                   ? 'bg-indigo-600 text-white'
@@ -177,13 +226,16 @@ const Reportes = () => {
               }`}
             >
               {tipo.nombre} ({tipo.count})
-            </button>
+            </motion.button>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       {/* Lista de Reportes */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+      <motion.div 
+        variants={itemVariants}
+        className="bg-white rounded-xl shadow-sm border border-gray-200"
+      >
         <div className="p-6 border-b border-gray-200">
           <h3 className="text-lg font-bold text-gray-800">
             {filtroTipo === 'todos' ? 'Todos los Reportes' : `Reportes de ${filtroTipo}`}
@@ -192,7 +244,11 @@ const Reportes = () => {
 
         <div className="divide-y divide-gray-200">
           {reportesFiltrados.map((reporte) => (
-            <div key={reporte.id} className="p-6 hover:bg-gray-50 transition-colors">
+            <motion.div 
+              key={reporte.id} 
+              variants={itemVariants}
+              className="p-6 hover:bg-gray-50 transition-colors"
+            >
               <div className="flex items-start gap-4">
                 <div className={`p-3 rounded-lg ${
                   reporte.formato === 'PDF' ? 'bg-red-100' : 'bg-green-100'
@@ -228,31 +284,47 @@ const Reportes = () => {
 
                   {reporte.estado === 'Disponible' && (
                     <div className="flex gap-2 mt-4">
-                      <button className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm">
+                      <motion.button 
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm"
+                      >
                         <Download size={16} />
                         Descargar
-                      </button>
-                      <button className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm">
+                      </motion.button>
+                      <motion.button 
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm"
+                      >
                         <Eye size={16} />
                         Vista Previa
-                      </button>
-                      <button className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm">
+                      </motion.button>
+                      <motion.button 
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm"
+                      >
                         <Printer size={16} />
                         Imprimir
-                      </button>
-                      <button className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm">
+                      </motion.button>
+                      <motion.button 
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm"
+                      >
                         <Mail size={16} />
                         Enviar
-                      </button>
+                      </motion.button>
                     </div>
                   )}
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

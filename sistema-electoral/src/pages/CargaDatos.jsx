@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Upload, File, CheckCircle, AlertCircle, Download, X, Database, Eye, Trash2, Calendar, Users, BarChart } from 'lucide-react';
 
 const CargaDatos = () => {
@@ -16,6 +17,19 @@ const CargaDatos = () => {
     },
   ]);
   const [dragActive, setDragActive] = useState(false);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } },
+  };
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -127,9 +141,17 @@ const CargaDatos = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <motion.div 
+      className="space-y-6"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       {/* Instrucciones */}
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
+      <motion.div 
+        variants={itemVariants}
+        className="bg-blue-50 border border-blue-200 rounded-xl p-6"
+      >
         <h3 className="text-lg font-bold text-blue-900 mb-2">Instrucciones de Carga</h3>
         <ul className="text-sm text-blue-800 space-y-1">
           <li>• Formatos aceptados: CSV, XLSX, JSON</li>
@@ -137,10 +159,13 @@ const CargaDatos = () => {
           <li>• Asegúrese de que los datos incluyan: ID, Nombre, Edad, Distrito</li>
           <li>• Los archivos se procesarán automáticamente después de la carga</li>
         </ul>
-      </div>
+      </motion.div>
 
       {/* Zona de Carga */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <motion.div 
+        variants={itemVariants}
+        className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+      >
         <h3 className="text-lg font-bold text-gray-800 mb-4">Cargar Archivos</h3>
         
         <form 
@@ -179,7 +204,11 @@ const CargaDatos = () => {
             <h4 className="text-md font-bold text-gray-800 mb-3">Archivos en Proceso</h4>
             <div className="space-y-3">
               {uploadedFiles.map((file) => (
-                <div key={file.id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <motion.div 
+                  key={file.id} 
+                  variants={itemVariants}
+                  className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200"
+                >
                   <File className="text-indigo-600" size={24} />
                   <div className="flex-1">
                     <div className="flex justify-between items-center mb-1">
@@ -204,15 +233,18 @@ const CargaDatos = () => {
                   >
                     <X size={18} />
                   </button>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
         )}
-      </div>
+      </motion.div>
 
       {/* SECCIÓN DE DATASETS CARGADOS - ADAPTADA DEL CÓDIGO ANTERIOR */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <motion.div 
+        variants={itemVariants}
+        className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+      >
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="text-2xl font-bold text-gray-800">Datasets Cargados</h3>
@@ -233,7 +265,12 @@ const CargaDatos = () => {
         ) : (
           <div className="space-y-4">
             {datasets.map((dataset) => (
-              <div key={dataset.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors group">
+              <motion.div 
+                key={dataset.id} 
+                variants={itemVariants}
+                className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors group"
+                whileHover={{ y: -4 }}
+              >
                 <div className="flex items-start gap-4 flex-1">
                   <div className={`p-2 rounded-lg ${
                     dataset.formato === 'CSV' 
@@ -274,12 +311,12 @@ const CargaDatos = () => {
                     {dataset.formato}
                   </Badge>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         )}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
