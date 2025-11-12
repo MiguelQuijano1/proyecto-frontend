@@ -98,22 +98,26 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen,
         className="relative p-5 flex items-center justify-between border-b border-gray-200"
       >
         {sidebarOpen && (
-          <div className="flex items-center gap-3">
-            <div 
-              className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm"
-              style={{
-                background: 'linear-gradient(135deg, #475569 0%, #64748b 100%)'
-              }}
-            >
-              <Zap className="text-white" size={20} />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-slate-800">
-                ONPE
-              </h1>
-              <p className="text-xs text-slate-500">Sistema Electoral</p>
-            </div>
-          </div>
+<div className="flex items-center gap-3">
+  {/* Contenedor del logo */}
+  <div
+    className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm overflow-hidden bg-white"
+  >
+    <img
+      src="/Logo/icono.png"
+      alt="Logo ONPE"
+      className="w-full h-full object-contain"
+    />
+  </div>
+
+  {/* Texto del encabezado */}
+  <div>
+    <h1 className="text-xl font-bold text-slate-800">
+      ONPE
+    </h1>
+    <p className="text-xs text-slate-500">Sistema Electoral</p>
+  </div>
+</div>
         )}
         <button 
           onClick={() => setSidebarOpen(!sidebarOpen)}

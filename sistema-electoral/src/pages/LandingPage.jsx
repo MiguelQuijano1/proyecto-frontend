@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Vote, CheckCircle, AlertCircle, Loader, User, MapPin, Phone, Mail, Shield, Lock, X, ChevronRight, FileText, Users, BarChart, Award, Globe, Zap, TrendingUp, ArrowRight, Star, Clock, Users2, Eye, Fingerprint, CheckSquare } from 'lucide-react';
+import { Vote, CheckCircle, AlertCircle, Loader, User, MapPin, Phone, Mail, Shield, Lock, X, ChevronRight, FileText, Users, BarChart, Award, Globe, Zap, TrendingUp, ArrowRight, Star, Clock, Users2, Eye, Fingerprint, CheckSquare, MessageCircle, Send } from 'lucide-react';
 
 const LandingPage = () => {
     const navigate = useNavigate();
@@ -40,6 +40,95 @@ const LandingPage = () => {
     const [viewingProposals, setViewingProposals] = useState(null);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [activeTab, setActiveTab] = useState('presidencial');
+
+    // Estado del Chatbot
+    const [chatbotOpen, setChatbotOpen] = useState(false);
+    const [chatMessages, setChatMessages] = useState([
+        {
+            id: 1,
+            type: 'bot',
+            text: '¡Hola! Soy el Asistente Electoral ONPE 🤖. ¿Cómo puedo ayudarte hoy?',
+            timestamp: new Date()
+        }
+    ]);
+    const [chatInput, setChatInput] = useState('');
+    const [isTyping, setIsTyping] = useState(false);
+
+    // Respuestas predefinidas del chatbot
+const chatbotResponses = {
+  'hola': '👋 ¡Hola! Bienvenido al Sistema de Votación Virtual de la ONPE. Estoy aquí para ayudarte con todo lo relacionado al proceso electoral. ¿Qué deseas saber hoy?',
+  
+  'cómo votar': '🗳️ Para emitir tu voto sigue estos pasos:\n1️⃣ Ingresa tu número de DNI.\n2️⃣ Verifica que tus datos personales sean correctos.\n3️⃣ Elige a tus candidatos en las categorías disponibles (presidencial, regional o distrital).\n4️⃣ Confirma tu selección para registrar tu voto.\n¡Y listo! Tu participación quedará registrada de forma segura.',
+  
+  'requisitos': '📋 Para poder votar necesitas:\n- Ser ciudadano(a) peruano(a).\n- Tener 18 años cumplidos.\n- Contar con un DNI vigente.\nSi cumples con estos requisitos, podrás participar en el proceso electoral sin problemas.',
+  
+  'candidatos': '👥 En esta plataforma podrás consultar a los candidatos presidenciales, regionales y distritales. Cada perfil incluye su foto, partido político y principales propuestas. Te recomiendo revisarlos antes de emitir tu voto.',
+  
+  'seguridad': '🔐 La seguridad es nuestra prioridad. El sistema utiliza **cifrado AES-256**, **autenticación biométrica** y conexiones **seguras (HTTPS)** para proteger tus datos. Además, todos los votos son **anónimos e inalterables**.',
+  
+  'horario': '🕒 La plataforma de votación está disponible las 24 horas del día durante el periodo electoral oficial. Recuerda ingresar y votar antes de la fecha límite establecida por la ONPE.',
+  
+  'ayuda': '💡 Puedo asistirte con la siguiente información:\n- Cómo votar\n- Requisitos para votar\n- Información de candidatos\n- Seguridad del sistema\n- Horarios de votación\n- Contacto con soporte\n¿Sobre qué tema te gustaría saber más?',
+  
+  'contacto': '📞 Si necesitas asistencia personalizada, comunícate con nuestro equipo de soporte:\n- Línea gratuita: 0800-12345\n- Correo: soporte@onpe.gob.pe\n- Horario de atención: Lunes a domingo, de 8:00 a.m. a 8:00 p.m.\n¿Deseas que te ayude con algo más?'
+};
+
+// 🔍 Función que detecta el mensaje del usuario y busca coincidencias
+function getChatbotResponse(userInput) {
+  const input = userInput.toLowerCase().trim();
+
+  // Palabras clave asociadas a cada tema
+  const keywords = {
+    'hola': ['hola', 'buenos días', 'buenas tardes', 'hey', 'saludos'],
+    'cómo votar': ['votar', 'emitir voto', 'cómo votar', 'quiero votar', 'proceso de votación'],
+    'requisitos': ['requisitos', 'qué necesito', 'condiciones', 'puedo votar', 'edad mínima'],
+    'candidatos': ['candidatos', 'postulantes', 'ver candidatos', 'lista de candidatos', 'presidenciales', 'regionales', 'distritales'],
+    'seguridad': ['seguridad', 'protegido', 'datos', 'cifrado', 'privacidad'],
+    'horario': ['horario', 'hora', 'cuándo puedo votar', 'disponible', 'tiempo'],
+    'ayuda': ['ayuda', 'asistencia', 'soporte', 'no entiendo', 'qué puedo hacer'],
+    'contacto': ['contacto', 'llamar', 'correo', 'soporte', 'teléfono']
+  };
+
+  // Buscar coincidencia por palabra clave
+  for (const key in keywords) {
+    if (keywords[key].some(word => input.includes(word))) {
+      return chatbotResponses[key];
+    }
+  }
+
+  // Respuesta por defecto si no se entiende el mensaje
+  return '🤔 Lo siento, no entendí tu consulta. Puedes pedirme ayuda escribiendo "ayuda" o decirme sobre qué tema deseas información (por ejemplo, "requisitos" o "cómo votar").';
+}
+
+
+    // Función para enviar mensaje en el chatbot
+    const handleSendMessage = () => {
+        if (!chatInput.trim()) return;
+
+        // Agregar mensaje del usuario
+        const userMessage = {
+            id: chatMessages.length + 1,
+            type: 'user',
+            text: chatInput,
+            timestamp: new Date()
+        };
+
+        setChatMessages(prev => [...prev, userMessage]);
+        setChatInput('');
+        setIsTyping(true);
+
+        // Simular respuesta del bot con delay
+        setTimeout(() => {
+            const botResponse = {
+                id: chatMessages.length + 2,
+                type: 'bot',
+                text: getChatbotResponse(chatInput),
+                timestamp: new Date()
+            };
+            setChatMessages(prev => [...prev, botResponse]);
+            setIsTyping(false);
+        }, 800);
+    };
 
     // Animaciones mejoradas
     const containerVariants = {
@@ -700,12 +789,17 @@ const LandingPage = () => {
                 <div className="max-w-7xl mx-auto px-4 py-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <motion.div
-                                whileHover={{ scale: 1.05, rotate: 5 }}
-                                className="w-12 h-12 bg-gradient-to-br from-slate-600 to-slate-700 rounded-xl flex items-center justify-center shadow-lg"
-                            >
-                                <Vote className="text-white" size={24} />
-                            </motion.div>
+                <motion.div
+                    whileHover={{ scale: 1.05, rotate: 5 }}
+                    className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg overflow-hidden bg-white"
+                >
+                    {/* Logo importado desde la carpeta public */}
+                    <img
+                        src="/Logo/icono.png"
+                        alt="Logo ONPE"
+                        className="w-full h-full object-contain"
+                    />
+                </motion.div>
                             <div>
                                 <h1 className="text-2xl font-bold bg-gradient-to-r from-slate-600 to-slate-700 bg-clip-text text-transparent">
                                     ONPE - Sistema de Votación
@@ -1692,6 +1786,113 @@ const LandingPage = () => {
                     </div>
                 </div>
             </motion.footer>
+
+            {/* Chatbot Flotante */}
+            <motion.div className="fixed bottom-8 right-8 z-50">
+                {/* Botón Chatbot */}
+                <AnimatePresence>
+                    {!chatbotOpen && (
+                        <motion.button
+                            onClick={() => setChatbotOpen(true)}
+                            className="bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800 text-white p-4 rounded-full shadow-lg hover:shadow-xl"
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                            animate={{ y: [0, -10, 0] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                        >
+                            <MessageCircle size={24} />
+                        </motion.button>
+                    )}
+                </AnimatePresence>
+
+                {/* Ventana del Chat */}
+                <AnimatePresence>
+                    {chatbotOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+                            className="absolute bottom-0 right-0 w-96 h-screen sm:h-96 bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+                        >
+                            {/* Header del Chat */}
+                            <div className="bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800 p-4 flex justify-between items-center">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                                    <h3 className="font-bold text-white">Asistente ONPE</h3>
+                                </div>
+                                <motion.button
+                                    onClick={() => setChatbotOpen(false)}
+                                    whileHover={{ rotate: 90 }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    <X size={20} className="text-white" />
+                                </motion.button>
+                            </div>
+
+                            {/* Mensajes del Chat */}
+                            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-800/50">
+                                {chatMessages.map((msg, index) => (
+                                    <motion.div
+                                        key={msg.id}
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                                    >
+                                        <div
+                                            className={`max-w-xs px-4 py-2 rounded-lg whitespace-pre-wrap text-sm ${
+                                                msg.type === 'user'
+                                                    ? 'bg-blue-600 text-white'
+                                                    : 'bg-gray-700 text-gray-100'
+                                            }`}
+                                        >
+                                            {msg.text}
+                                        </div>
+                                    </motion.div>
+                                ))}
+
+                                {/* Indicador de Escritura */}
+                                {isTyping && (
+                                    <motion.div
+                                        className="flex gap-1"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                    >
+                                        <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
+                                        <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                                        <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                                    </motion.div>
+                                )}
+                            </div>
+
+                            {/* Input del Chat */}
+                            <div className="border-t border-gray-700 p-3 flex gap-2 bg-gray-800">
+                                <input
+                                    type="text"
+                                    value={chatInput}
+                                    onChange={(e) => setChatInput(e.target.value)}
+                                    onKeyPress={(e) => {
+                                        if (e.key === 'Enter') {
+                                            handleSendMessage();
+                                        }
+                                    }}
+                                    placeholder="Escribe tu pregunta..."
+                                    className="flex-1 bg-gray-700 text-white px-3 py-2 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                    disabled={isTyping}
+                                />
+                                <motion.button
+                                    onClick={handleSendMessage}
+                                    disabled={isTyping}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                                >
+                                    <Send size={18} />
+                                </motion.button>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
         </motion.div>
     );
 };
