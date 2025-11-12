@@ -8,11 +8,18 @@ const LandingPage = () => {
 
     const [formData, setFormData] = useState({
         dni: '',
-        nombre_completo: '',
-        nombre: '',
+        nombres: '',
         apellido_paterno: '',
         apellido_materno: '',
+        nombre_completo: '',
+        departamento: '',
+        provincia: '',
         distrito: '',
+        direccion: '',
+        direccion_completa: '',
+        ubigeo_reniec: '',
+        ubigeo_sunat: '',
+        ubigeo: [],
         telefono: '',
         email: '',
         candidato: ''
@@ -31,6 +38,7 @@ const LandingPage = () => {
     });
     const [viewingProposals, setViewingProposals] = useState(null);
     const [activeFaq, setActiveFaq] = useState(null);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     // Candidatos por tipo de elección con imágenes reales y logos de partidos
     const candidatos = {
@@ -287,6 +295,32 @@ const LandingPage = () => {
         </div>
     );
 
+    // Componente para el modal de éxito
+    const SuccessModal = () => (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
+                <div className="bg-gradient-to-r from-green-500 to-green-600 p-6 text-white text-center">
+                    <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+                        <CheckCircle className="text-green-500" size={40} />
+                    </div>
+                    <h3 className="text-2xl font-bold mb-2">¡Voto Registrado con Éxito!</h3>
+                    <p className="text-sm opacity-90">Su participación ha sido registrada en el sistema electoral</p>
+                </div>
+                <div className="p-6 text-center">
+                    <p className="text-gray-700 mb-4">
+                        Gracias por ejercer su derecho al voto. Su participación es fundamental para fortalecer nuestra democracia.
+                    </p>
+                    <button
+                        onClick={closeSuccessModal}
+                        className="w-full px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all font-medium"
+                    >
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+
     const handleDniChange = async (e) => {
         const dni = e.target.value.replace(/\D/g, '').slice(0, 8);
         setFormData(prev => ({ ...prev, dni }));
@@ -303,16 +337,13 @@ const LandingPage = () => {
         setError('');
 
         try {
-            const response = await fetch(`https://api.migo.pe/api/v1/dni`, {
-                method: 'POST',
+            const response = await fetch(`https://api.factiliza.com/v1/dni/info/${dni}`, {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    token: 'HDy9QPXs3WMMHWyp7X9fbCvlTbC2qtXvVCO6hhivZygYo7PedRAKphMJn8L4',
-                    dni: dni
-                })
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzOTgzMiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6ImNvbnN1bHRvciJ9.a1qcTKi8QsEpQCxB8BTGHvn0tnFsi7vGfZi2ltv6cSw`
+                }
             });
 
             if (!response.ok) {
@@ -325,30 +356,23 @@ const LandingPage = () => {
             const result = await response.json();
 
             if (result.success) {
-                const nombreCompleto = result.nombre || '';
-                const partes = nombreCompleto.split(' ');
-
-                let nombre = '';
-                let apellidoPaterno = '';
-                let apellidoMaterno = '';
-
-                if (partes.length >= 3) {
-                    apellidoPaterno = partes[0];
-                    apellidoMaterno = partes[1];
-                    nombre = partes.slice(2).join(' ');
-                } else if (partes.length === 2) {
-                    apellidoPaterno = partes[0];
-                    nombre = partes[1];
-                } else if (partes.length === 1) {
-                    nombre = partes[0];
-                }
-
+                const data = result.data;
+                
                 setFormData(prev => ({
                     ...prev,
-                    nombre_completo: nombreCompleto,
-                    nombre: nombre,
-                    apellido_paterno: apellidoPaterno,
-                    apellido_materno: apellidoMaterno
+                    dni: data.numero,
+                    nombres: data.nombres,
+                    apellido_paterno: data.apellido_paterno,
+                    apellido_materno: data.apellido_materno,
+                    nombre_completo: data.nombre_completo,
+                    departamento: data.departamento,
+                    provincia: data.provincia,
+                    distrito: data.distrito,
+                    direccion: data.direccion,
+                    direccion_completa: data.direccion_completa,
+                    ubigeo_reniec: data.ubigeo_reniec,
+                    ubigeo_sunat: data.ubigeo_sunat,
+                    ubigeo: data.ubigeo
                 }));
                 setDniVerified(true);
                 setError('');
@@ -402,11 +426,9 @@ const LandingPage = () => {
             ...formData,
             candidatos: selectedCandidates
         });
-        setSuccess(true);
-
-        setTimeout(() => {
-            setSuccess(false);
-        }, 3000);
+        
+        // Mostramos el modal de éxito
+        setShowSuccessModal(true);
     };
 
     const closeModal = () => {
@@ -422,16 +444,29 @@ const LandingPage = () => {
         setViewingProposals(null);
         setFormData({
             dni: '',
-            nombre_completo: '',
-            nombre: '',
+            nombres: '',
             apellido_paterno: '',
             apellido_materno: '',
+            nombre_completo: '',
+            departamento: '',
+            provincia: '',
             distrito: '',
+            direccion: '',
+            direccion_completa: '',
+            ubigeo_reniec: '',
+            ubigeo_sunat: '',
+            ubigeo: [],
             telefono: '',
             email: '',
             candidato: ''
         });
         setDniVerified(false);
+    };
+
+    const closeSuccessModal = () => {
+        setShowSuccessModal(false);
+        // Opcional: también cerrar el formulario de votación o resetear el formulario
+        closeModal();
     };
 
     return (
@@ -560,7 +595,7 @@ const LandingPage = () => {
                                 <span className="text-2xl font-bold text-indigo-600">4</span>
                             </div>
                             <h3 className="text-lg font-semibold text-gray-900 mb-2">Confirmación</h3>
-                            <p className="text-sm text-gray-600">Recibe un código de confirmación que verifica tu voto</p>
+                            <p className="text-sm text-gray-600">Voto Enviado con Exito</p>
                         </div>
                     </div>
                 </div>
@@ -764,17 +799,6 @@ const LandingPage = () => {
                         </div>
 
                         <div className="p-6">
-                            {success && (
-                                <div className="m-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center gap-3">
-                                    <CheckCircle className="text-green-600" size={24} />
-                                    <div>
-                                        <p className="font-bold text-green-800">¡Voto(s) registrado(s) exitosamente!</p>
-                                        <p className="text-sm text-green-700">Gracias por participar en el proceso democrático</p>
-                                        <p className="text-xs text-green-600 mt-2">Puedes cerrar este formulario o emitir otros votos</p>
-                                    </div>
-                                </div>
-                            )}
-
                             {error && (
                                 <div className="m-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center gap-3">
                                     <AlertCircle className="text-red-600" size={24} />
@@ -818,17 +842,37 @@ const LandingPage = () => {
                                                 </div>
                                             </div>
 
-                                            <div>
+                                            <div className="md:col-span-2">
                                                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                                                    Nombre
+                                                    Nombre Completo
                                                 </label>
                                                 <input
                                                     type="text"
-                                                    name="nombre"
-                                                    value={formData.nombre}
+                                                    name="nombre_completo"
+                                                    value={formData.nombre_completo}
+                                                    onChange={handleInputChange}
+                                                    placeholder="Nombre completo"
+                                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                    readOnly={dniVerified}
+                                                    autoComplete="name"
+                                                    spellCheck="false"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                    Nombres
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="nombres"
+                                                    value={formData.nombres}
                                                     onChange={handleInputChange}
                                                     placeholder="Nombres"
                                                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                    readOnly={dniVerified}
+                                                    autoComplete="given-name"
+                                                    spellCheck="false"
                                                 />
                                             </div>
 
@@ -843,6 +887,9 @@ const LandingPage = () => {
                                                     onChange={handleInputChange}
                                                     placeholder="Apellido Paterno"
                                                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                    readOnly={dniVerified}
+                                                    autoComplete="family-name"
+                                                    spellCheck="false"
                                                 />
                                             </div>
 
@@ -857,6 +904,94 @@ const LandingPage = () => {
                                                     onChange={handleInputChange}
                                                     placeholder="Apellido Materno"
                                                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                    readOnly={dniVerified}
+                                                    autoComplete="family-name"
+                                                    spellCheck="false"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                    Departamento
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="departamento"
+                                                    value={formData.departamento}
+                                                    onChange={handleInputChange}
+                                                    placeholder="Departamento"
+                                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                    readOnly={dniVerified}
+                                                    autoComplete="address-level1"
+                                                    spellCheck="false"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                    Provincia
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="provincia"
+                                                    value={formData.provincia}
+                                                    onChange={handleInputChange}
+                                                    placeholder="Provincia"
+                                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                    readOnly={dniVerified}
+                                                    autoComplete="address-level2"
+                                                    spellCheck="false"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                    Distrito
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="distrito"
+                                                    value={formData.distrito}
+                                                    onChange={handleInputChange}
+                                                    placeholder="Distrito"
+                                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                    readOnly={dniVerified}
+                                                    autoComplete="address-level3"
+                                                    spellCheck="false"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                    Dirección
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="direccion"
+                                                    value={formData.direccion}
+                                                    onChange={handleInputChange}
+                                                    placeholder="Dirección"
+                                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                    readOnly={dniVerified}
+                                                    autoComplete="street-address"
+                                                    spellCheck="false"
+                                                />
+                                            </div>
+
+                                            <div className="md:col-span-2">
+                                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                    Dirección Completa
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="direccion_completa"
+                                                    value={formData.direccion_completa}
+                                                    onChange={handleInputChange}
+                                                    placeholder="Dirección completa"
+                                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                    readOnly={dniVerified}
+                                                    autoComplete="street-address"
+                                                    spellCheck="false"
                                                 />
                                             </div>
 
@@ -872,6 +1007,8 @@ const LandingPage = () => {
                                                     onChange={handleInputChange}
                                                     placeholder="987654321"
                                                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                    autoComplete="tel"
+                                                    spellCheck="false"
                                                 />
                                             </div>
 
@@ -887,27 +1024,9 @@ const LandingPage = () => {
                                                     onChange={handleInputChange}
                                                     placeholder="correo@ejemplo.com"
                                                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                    autoComplete="email"
+                                                    spellCheck="false"
                                                 />
-                                            </div>
-
-                                            <div className="md:col-span-2">
-                                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                                    <MapPin size={16} className="inline mr-1" />
-                                                    Distrito
-                                                </label>
-                                                <select
-                                                    name="distrito"
-                                                    value={formData.distrito}
-                                                    onChange={handleInputChange}
-                                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                                >
-                                                    <option value="">Seleccione su distrito</option>
-                                                    <option value="Lima">Lima</option>
-                                                    <option value="Callao">Callao</option>
-                                                    <option value="Arequipa">Arequipa</option>
-                                                    <option value="Cusco">Cusco</option>
-                                                    <option value="Trujillo">Trujillo</option>
-                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -1028,6 +1147,9 @@ const LandingPage = () => {
                     onClose={() => setViewingProposals(null)}
                 />
             )}
+
+            {/* Modal de Éxito */}
+            {showSuccessModal && <SuccessModal />}
 
             {/* Footer */}
             <footer className="bg-gray-900 text-white py-12">
