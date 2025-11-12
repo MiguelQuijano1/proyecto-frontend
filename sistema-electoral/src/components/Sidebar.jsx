@@ -44,6 +44,7 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen,
     {
       title: 'Entrenamiento',
       items: [
+        { id: 'Entrenamiento', name: 'Entrenamiento Modelo', icon: TrendingUp },
         { id: 'analisis', name: 'Análisis Estadístico', icon: TrendingUp },
         { id: 'visualizacion', name: 'Visualización', icon: BarChart3 },
       ]

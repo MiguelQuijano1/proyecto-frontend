@@ -15,7 +15,7 @@ import RegistroVotantes from './pages/RegistroVotantes';
 import Candidatos from './pages/Candidatos';
 import ResultadosElectorales from './pages/ResultadosElectorales';
 import Reportes from './pages/Reportes';
-
+import EntrenamientoModelo from './pages/EntrenamientoModelo';
 // Páginas de autenticación
 import Login from './pages/Login';
 import LandingPage from './pages/LandingPage';
@@ -60,6 +60,7 @@ const DashboardLayout = ({ activeSection, setActiveSection, sidebarOpen, setSide
       case 'votantes': return <RegistroVotantes />;
       
       // Módulo de Datos
+      case "Entrenamiento": return <EntrenamientoModelo />;
       case 'datos': return <GestionDatos />;
       case 'carga': return <CargaDatos />;
       case 'limpieza': return <LimpiezaDatos />;
