@@ -185,83 +185,6 @@ const AnalisisEstadistico = () => {
     </motion.div>
   );
 
-  const AnalisisInferencial = () => (
-    <motion.div
-      key="inferencial"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
-      className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-    >
-      <motion.div 
-        className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.1 }}
-      >
-        <h3 className="text-lg font-bold text-gray-800 mb-4">Pruebas de Hipótesis</h3>
-        <div className="space-y-4">
-          {[
-            { title: 'Prueba Chi-cuadrado', stat1: 'Estadístico χ²', value1: '24.56', stat2: 'Valor p', value2: '0.0023', desc: 'Resultado: Se rechaza H₀ (α = 0.05)' },
-            { title: 'Prueba T de Student', stat1: 'Estadístico t', value1: '3.42', stat2: 'Valor p', value2: '0.0008', desc: 'Diferencia significativa entre grupos' },
-            { title: 'ANOVA', stat1: 'F-estadístico', value1: '12.89', stat2: 'Valor p', value2: '< 0.001', desc: 'Diferencias significativas entre distritos' }
-          ].map((test, index) => (
-            <motion.div 
-              key={index}
-              className="p-4 border border-gray-200 rounded-lg"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 + index * 0.1 }}
-              whileHover={{ scale: 1.02 }}
-            >
-              <p className="font-medium text-gray-800 mb-2">{test.title}</p>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <p className="text-xs text-gray-600">{test.stat1}</p>
-                  <p className="text-lg font-bold text-gray-800">{test.value1}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-600">{test.stat2}</p>
-                  <p className="text-lg font-bold text-green-600">{test.value2}</p>
-                </div>
-              </div>
-              <p className="text-xs text-gray-600 mt-2">{test.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
-
-      <motion.div 
-        className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        <h3 className="text-lg font-bold text-gray-800 mb-4">Intervalos de Confianza</h3>
-        <div className="space-y-4">
-          {[
-            { color: 'indigo', title: 'Media poblacional (95% IC)', value: '36.8 - 40.2 años', desc: 'Intervalo de confianza del 95%' },
-            { color: 'green', title: 'Proporción (95% IC)', value: '0.62 - 0.68', desc: 'Proporción de votantes activos' },
-            { color: 'purple', title: 'Diferencia de medias (95% IC)', value: '2.3 - 5.7 años', desc: 'Entre Lima y provincias' }
-          ].map((interval, index) => (
-            <motion.div 
-              key={index}
-              className={`p-4 bg-${interval.color}-50 border border-${interval.color}-200 rounded-lg`}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3 + index * 0.1 }}
-              whileHover={{ scale: 1.02 }}
-            >
-              <p className={`text-sm font-medium text-${interval.color}-900 mb-2`}>{interval.title}</p>
-              <p className={`text-2xl font-bold text-${interval.color}-900`}>{interval.value}</p>
-              <p className={`text-xs text-${interval.color}-700 mt-1`}>{interval.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-
   const AnalisisPredictivo = () => (
     <motion.div
       key="predictivo"
@@ -418,10 +341,9 @@ const AnalisisEstadistico = () => {
         animate={{ opacity: 1, y: 0 }}
       >
         <h3 className="text-lg font-bold text-gray-800 mb-4">Tipo de Análisis</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[
             { id: 'descriptivo', label: 'Análisis Descriptivo', description: 'Estadísticas básicas', icon: Calculator },
-            { id: 'inferencial', label: 'Análisis Inferencial', description: 'Pruebas de hipótesis', icon: TrendingUp },
             { id: 'predictivo', label: 'Análisis Predictivo', description: 'Modelos y predicciones', icon: Activity }
           ].map((analysis, index) => (
             <motion.button
@@ -449,11 +371,10 @@ const AnalisisEstadistico = () => {
       {/* Contenido del Análisis Seleccionado */}
       <div>
         {selectedAnalysis === 'descriptivo' && <AnalisisDescriptivo />}
-        {selectedAnalysis === 'inferencial' && <AnalisisInferencial />}
         {selectedAnalysis === 'predictivo' && <AnalisisPredictivo />}
       </div>
     </div>
   );
 };
 
-export default AnalisisEstadistico;
+export default AnalisisEstadistico; 

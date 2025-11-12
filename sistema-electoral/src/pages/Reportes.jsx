@@ -8,64 +8,24 @@ const Reportes = () => {
   const reportesDisponibles = [
     {
       id: 1,
-      nombre: 'Informe de Participación Electoral',
+      nombre: 'Porcentaje de Votos',
       tipo: 'Estadístico',
-      descripcion: 'Análisis detallado de la participación ciudadana por distritos',
+      descripcion: 'Análisis detallado de la participación ciudadana',
       fecha: '2024-10-25',
       tamaño: '2.4 MB',
       formato: 'PDF',
       estado: 'Disponible'
-    },
+    },  
     {
       id: 2,
-      nombre: 'Resultados por Mesa de Votación',
+      nombre: 'Porcentaje de votos por región',
       tipo: 'Resultados',
-      descripcion: 'Desglose completo de votos por cada mesa electoral',
+      descripcion: 'Porcentaje de votos por región',
       fecha: '2024-10-25',
       tamaño: '8.7 MB',
       formato: 'Excel',
       estado: 'Disponible'
-    },
-    {
-      id: 3,
-      nombre: 'Reporte de Incidencias',
-      tipo: 'Operativo',
-      descripcion: 'Registro de todas las incidencias durante el proceso',
-      fecha: '2024-10-25',
-      tamaño: '1.2 MB',
-      formato: 'PDF',
-      estado: 'Disponible'
-    },
-    {
-      id: 4,
-      nombre: 'Auditoría de Actas Electorales',
-      tipo: 'Auditoría',
-      descripcion: 'Verificación y validación de actas procesadas',
-      fecha: '2024-10-24',
-      tamaño: '5.3 MB',
-      formato: 'PDF',
-      estado: 'Disponible'
-    },
-    {
-      id: 5,
-      nombre: 'Análisis Demográfico de Votantes',
-      tipo: 'Estadístico',
-      descripcion: 'Distribución de votantes por edad, género y ubicación',
-      fecha: '2024-10-24',
-      tamaño: '3.1 MB',
-      formato: 'PDF',
-      estado: 'Disponible'
-    },
-    {
-      id: 6,
-      nombre: 'Reporte de Capacitación Electoral',
-      tipo: 'Operativo',
-      descripcion: 'Detalle de capacitaciones realizadas a miembros de mesa',
-      fecha: '2024-10-23',
-      tamaño: '1.8 MB',
-      formato: 'Excel',
-      estado: 'Generando'
-    },
+    }
   ];
 
   const tiposReporte = [
@@ -203,71 +163,8 @@ const Reportes = () => {
         })}
       </div>
 
-      {/* Filtros y Búsqueda */}
-      <motion.div 
-        variants={cardVariants}
-        className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
-      >
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Buscar Reporte</label>
-            <motion.input
-              type="text"
-              placeholder="Nombre del reporte..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500"
-              whileFocus={{ scale: 1.02 }}
-            />
-          </div>
-          <div className="md:w-64">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Fecha</label>
-            <motion.input
-              type="date"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500"
-              whileFocus={{ scale: 1.02 }}
-            />
-          </div>
-          <div className="md:w-48 flex items-end">
-            <motion.button 
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors"
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-            >
-              <Filter size={18} />
-              Filtrar
-            </motion.button>
-          </div>
-        </div>
-      </motion.div>
 
-      {/* Categorías de Reportes */}
-      <motion.div 
-        variants={cardVariants}
-        className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
-      >
-        <h3 className="text-lg font-bold text-gray-800 mb-4">Categorías</h3>
-        <div className="flex flex-wrap gap-3">
-          {tiposReporte.map((tipo, index) => (
-            <motion.button
-              key={tipo.id}
-              onClick={() => setFiltroTipo(tipo.id)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filtroTipo === tipo.id
-                  ? 'bg-slate-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              {tipo.nombre} ({tipo.count})
-            </motion.button>
-          ))}
-        </div>
-      </motion.div>
+
 
       {/* Lista de Reportes */}
       <motion.div 
