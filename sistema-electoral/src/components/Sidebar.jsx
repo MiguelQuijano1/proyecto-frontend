@@ -31,7 +31,6 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen,
       title: 'Gestión Electoral',
       items: [
         { id: 'candidatos', name: 'Candidatos', icon: UserCheck },
-        { id: 'resultados', name: 'Resultados', icon: BarChart3 },
       ]
     },
     {
@@ -40,6 +39,11 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen,
         { id: 'datos', name: 'Gestión de Datos', icon: Database },
         { id: 'carga', name: 'Importar Datos', icon: FileUp },
         { id: 'limpieza', name: 'Detección de Fraudes', icon: Settings },
+      ]
+    },
+    {
+      title: 'Entrenamiento',
+      items: [
         { id: 'analisis', name: 'Análisis Estadístico', icon: TrendingUp },
         { id: 'visualizacion', name: 'Visualización', icon: BarChart3 },
       ]

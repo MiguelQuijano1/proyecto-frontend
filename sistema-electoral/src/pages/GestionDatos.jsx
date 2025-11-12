@@ -1,44 +1,122 @@
-import { useState } from 'react';
-import { Search, Filter, Download, Trash2, Edit, CheckCircle, XCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, Filter, Download, Trash2, Edit, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
 
 const GestionDatos = () => {
   const [activeTab, setActiveTab] = useState('presidencial');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRows, setSelectedRows] = useState([]);
+  const [votantes, setVotantes] = useState([]);
 
-  // Datos de votantes - Presidencial
-  const votantesPresidencial = [
-    { id: 1, nombre: 'Juan Pérez Gómez', dni: '72345678', edad: 45, distrito: 'San Isidro', voto: 'Keiko Fujimori', estado: 'Activo' },
-    { id: 2, nombre: 'María López Ruiz', dni: '87654321', edad: 38, distrito: 'Miraflores', voto: 'Pedro Castillo', estado: 'Activo' },
-    { id: 3, nombre: 'Carlos Mendoza', dni: '45678912', edad: 29, distrito: 'Surco', voto: 'Hernando de Soto', estado: 'Activo' },
-    { id: 4, nombre: 'Ana Torres Vega', dni: '78912345', edad: 52, distrito: 'La Molina', voto: 'Yonhy Lescano', estado: 'Inactivo' },
-    { id: 5, nombre: 'Pedro Ramírez', dni: '32165498', edad: 33, distrito: 'San Borja', voto: 'Verónika Mendoza', estado: 'Activo' },
-    { id: 6, nombre: 'Laura Sánchez', dni: '65498732', edad: 27, distrito: 'Barranco', voto: 'Keiko Fujimori', estado: 'Activo' },
-    { id: 7, nombre: 'Diego Morales', dni: '98765432', edad: 61, distrito: 'Magdalena', voto: 'Pedro Castillo', estado: 'Inactivo' },
-    { id: 8, nombre: 'Sofía Vargas', dni: '15975348', edad: 24, distrito: 'Pueblo Libre', voto: 'Hernando de Soto', estado: 'Activo' },
+  // Función para cargar votantes del localStorage
+  const cargarVotantes = () => {
+    const votantesGuardados = JSON.parse(localStorage.getItem('votantes') || '[]');
+    setVotantes(votantesGuardados);
+  };
+
+  // Cargar votantes al montar el componente
+  useEffect(() => {
+    cargarVotantes();
+  }, []);
+
+  // Datos simulados iniciales (se combinarán con los del localStorage)
+  const votantesIniciales = [
+    { 
+      id: 1, 
+      dni: '72345678', 
+      nombre: 'Juan Pérez Gómez', 
+      edad: 45, 
+      distrito: 'San Isidro',
+      departamento: 'Lima',
+      provincia: 'Lima',
+      direccion: 'Av. Principal 123',
+      telefono: '987654321',
+      email: 'juan.perez@email.com',
+      votoPresidencial: 'Keiko Fujimori',
+      votoRegional: 'Rafael López Aliaga',
+      votoDistrital: 'Nancy Vizurraga',
+      estado: 'Activo',
+      fechaRegistro: '2024-01-15'
+    },
+    { 
+      id: 2, 
+      dni: '87654321', 
+      nombre: 'María López Ruiz', 
+      edad: 38, 
+      distrito: 'Miraflores',
+      departamento: 'Lima',
+      provincia: 'Lima',
+      direccion: 'Jr. Los Olivos 456',
+      telefono: '987123456',
+      email: 'maria.lopez@email.com',
+      votoPresidencial: 'Pedro Castillo',
+      votoRegional: 'Kimberly Gutiérrez',
+      votoDistrital: 'Luis Molina',
+      estado: 'Activo',
+      fechaRegistro: '2024-02-20'
+    },
+    { 
+      id: 3, 
+      dni: '45678912', 
+      nombre: 'Carlos Mendoza', 
+      edad: 29, 
+      distrito: 'Surco',
+      departamento: 'Lima',
+      provincia: 'Lima',
+      direccion: 'Calle Las Flores 789',
+      telefono: '965874123',
+      email: 'carlos.mendoza@email.com',
+      votoPresidencial: 'Hernando de Soto',
+      votoRegional: 'Werner Salcedo',
+      votoDistrital: 'Marco Álvarez',
+      estado: 'Activo',
+      fechaRegistro: '2024-03-10'
+    },
+    { 
+      id: 4, 
+      dni: '78912345', 
+      nombre: 'Ana Torres Vega', 
+      edad: 'null', 
+      distrito: 'La Molina',
+      departamento: 'Lima',
+      provincia: 'Lima',
+      direccion: 'Av. La Universidad 321',
+      telefono: '912345678',
+      email: 'ana.torres@email.com',
+      votoPresidencial: 'Rafael López Aliaga',
+      votoRegional: 'Servando García',
+      votoDistrital: 'Álvaro Paz',
+      estado: 'Inactivo',
+      fechaRegistro: '2024-04-05'
+    },
+    { 
+      id: 5, 
+      dni: '32165498', 
+      nombre: 'Pedro Ramírez', 
+      edad: 33, 
+      distrito: 'San Borja',
+      departamento: 'Lima',
+      provincia: 'Lima',
+      direccion: 'Jr. San Luis 654',
+      telefono: '923456789',
+      email: 'pedro.ramirez@email.com',
+      votoPresidencial: 'Pedro Castillo',
+      votoRegional: 'César Acuña',
+      votoDistrital: 'Carla García',
+      estado: 'Activo',
+      fechaRegistro: '2024-05-12'
+    },
   ];
 
-  // Datos de votantes - Regional
-  const votantesRegional = [
-    { id: 1, nombre: 'Rosa Quispe', dni: '71234567', edad: 40, region: 'Lima', voto: 'Rafael López Aliaga', estado: 'Activo' },
-    { id: 2, nombre: 'Miguel Huamán', dni: '82345678', edad: 55, region: 'Arequipa', voto: 'Kimberly Gutiérrez', estado: 'Activo' },
-    { id: 3, nombre: 'Carmen Rojas', dni: '73456789', edad: 31, region: 'Cusco', voto: 'Werner Salcedo', estado: 'Inactivo' },
-    { id: 4, nombre: 'José Ccallocnto', dni: '84567890', edad: 48, region: 'Piura', voto: 'Servando García', estado: 'Activo' },
-    { id: 5, nombre: 'Elena Mamani', dni: '75678901', edad: 36, region: 'La Libertad', voto: 'César Acuña', estado: 'Activo' },
-  ];
+  // Combinar datos iniciales con datos del localStorage
+  const todosLosVotantes = [...votantesIniciales, ...votantes];
 
-  // Datos de votantes - Distrital
-  const votantesDistrital = [
-    { id: 1, nombre: 'Luis Fernández', dni: '70123456', edad: 42, distrito: 'San Isidro', voto: 'Nancy Vizurraga', estado: 'Activo' },
-    { id: 2, nombre: 'Patricia Díaz', dni: '81234567', edad: 39, distrito: 'Miraflores', voto: 'Luis Molina', estado: 'Activo' },
-    { id: 3, nombre: 'Andrés Castro', dni: '72345679', edad: 28, distrito: 'San Borja', voto: 'Marco Álvarez', estado: 'Inactivo' },
-    { id: 4, nombre: 'Gloria Paredes', dni: '83456780', edad: 51, distrito: 'La Molina', voto: 'Álvaro Paz', estado: 'Activo' },
-    { id: 5, nombre: 'Roberto Ortiz', dni: '74567891', edad: 35, distrito: 'Surco', voto: 'Carla García', estado: 'Inactivo' },
-  ];
-
-  // Datos según pestaña
-  const currentData = activeTab === 'presidencial' ? votantesPresidencial :
-                      activeTab === 'regional' ? votantesRegional : votantesDistrital;
+  // Filtrar por tipo de elección
+  const currentData = todosLosVotantes.filter(votante => {
+    if (activeTab === 'presidencial') return votante.votoPresidencial !== 'No votó';
+    if (activeTab === 'regional') return votante.votoRegional !== 'No votó';
+    if (activeTab === 'distrital') return votante.votoDistrital !== 'No votó';
+    return true;
+  });
 
   const handleSelectAll = (e) => {
     if (e.target.checked) {
@@ -68,11 +146,28 @@ const GestionDatos = () => {
       : <XCircle size={14} className="text-red-600" />;
   };
 
+  // Filtrar por búsqueda
+  const datosFiltrados = currentData.filter(row => 
+    row.dni.includes(searchTerm) || 
+    row.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    row.distrito.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    row.email?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="space-y-6 p-6 bg-gray-50 min-h-screen">
       {/* Título y pestañas */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Registro de Votantes por Nivel Electoral</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold text-gray-800">Registro de Votantes por Nivel Electoral</h2>
+          <button 
+            onClick={cargarVotantes}
+            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+          >
+            <RefreshCw size={18} />
+            Actualizar
+          </button>
+        </div>
         
         <div className="flex flex-wrap gap-2 border-b border-gray-200">
           <button
@@ -112,18 +207,18 @@ const GestionDatos = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
           <p className="text-sm text-gray-600">Total Votantes</p>
-          <p className="text-3xl font-bold text-gray-800">{currentData.length}</p>
+          <p className="text-3xl font-bold text-gray-800">{todosLosVotantes.length}</p>
         </div>
         <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
           <p className="text-sm text-gray-600">Activos</p>
           <p className="text-3xl font-bold text-green-600">
-            {currentData.filter(d => d.estado === 'Activo').length}
+            {todosLosVotantes.filter(d => d.estado === 'Activo').length}
           </p>
         </div>
         <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
           <p className="text-sm text-gray-600">Inactivos</p>
           <p className="text-3xl font-bold text-red-600">
-            {currentData.filter(d => d.estado === 'Inactivo').length}
+            {todosLosVotantes.filter(d => d.estado === 'Inactivo').length}
           </p>
         </div>
         <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
@@ -147,10 +242,10 @@ const GestionDatos = () => {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                 <input
                   type="text"
-                  placeholder="Buscar por DNI o nombre..."
+                  placeholder="Buscar por DNI, nombre, distrito, email..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64"
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-80"
                 />
               </div>
 
@@ -192,7 +287,7 @@ const GestionDatos = () => {
                 <th className="px-6 py-3 text-left">
                   <input
                     type="checkbox"
-                    checked={selectedRows.length === currentData.length && currentData.length > 0}
+                    checked={selectedRows.length === datosFiltrados.length && datosFiltrados.length > 0}
                     onChange={handleSelectAll}
                     className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                   />
@@ -200,54 +295,51 @@ const GestionDatos = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">DNI</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Nombre Completo</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Edad</th>
-                {activeTab !== 'regional' && (
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                    {activeTab === 'distrital' || activeTab === 'presidencial' ? 'Distrito' : 'Región'}
-                  </th>
-                )}
-                {activeTab === 'regional' && (
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Región</th>
-                )}
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Votó por</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Distrito</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Dirección</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Teléfono</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Email</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                  {activeTab === 'presidencial' && 'Voto Presidencial'}
+                  {activeTab === 'regional' && 'Voto Regional'}
+                  {activeTab === 'distrital' && 'Voto Distrital'}
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Fecha Registro</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Estado</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {currentData
-                .filter(row => 
-                  row.dni.includes(searchTerm) || 
-                  row.nombre.toLowerCase().includes(searchTerm.toLowerCase())
-                )
-                .map((row) => (
-                  <tr key={row.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4">
-                      <input
-                        type="checkbox"
-                        checked={selectedRows.includes(row.id)}
-                        onChange={() => handleSelectRow(row.id)}
-                        className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                      />
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">{row.dni}</td>
-                    <td className="px-6 py-4 text-sm text-gray-800 font-medium">{row.nombre}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{row.edad}</td>
-                    {activeTab !== 'regional' && (
-                      <td className="px-6 py-4 text-sm text-gray-600">
-                        {row.distrito || row.region}
-                      </td>
-                    )}
-                    {activeTab === 'regional' && (
-                      <td className="px-6 py-4 text-sm text-gray-600">{row.region}</td>
-                    )}
-                    <td className="px-6 py-4 text-sm font-medium text-indigo-700">{row.voto}</td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${getEstadoColor(row.estado)}`}>
-                        {getEstadoIcon(row.estado)}
-                        {row.estado}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
+              {datosFiltrados.map((row) => (
+                <tr key={row.id} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-6 py-4">
+                    <input
+                      type="checkbox"
+                      checked={selectedRows.includes(row.id)}
+                      onChange={() => handleSelectRow(row.id)}
+                      className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                    />
+                  </td>
+                  <td className="px-6 py-4 text-sm font-medium text-gray-900">{row.dni}</td>
+                  <td className="px-6 py-4 text-sm text-gray-800 font-medium">{row.nombre}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{row.edad}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{row.distrito}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{row.direccion || 'N/A'}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{row.telefono || 'N/A'}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{row.email || 'N/A'}</td>
+                  <td className="px-6 py-4 text-sm font-medium text-indigo-700">
+                    {activeTab === 'presidencial' && (row.votoPresidencial || 'No votó')}
+                    {activeTab === 'regional' && (row.votoRegional || 'No votó')}
+                    {activeTab === 'distrital' && (row.votoDistrital || 'No votó')}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{row.fechaRegistro}</td>
+                  <td className="px-6 py-4">
+                    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${getEstadoColor(row.estado)}`}>
+                      {getEstadoIcon(row.estado)}
+                      {row.estado}
+                    </span>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -255,8 +347,8 @@ const GestionDatos = () => {
         {/* Paginación */}
         <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex items-center justify-between">
           <p className="text-sm text-gray-700">
-            Mostrando <span className="font-medium">1</span> a <span className="font-medium">{currentData.length}</span> de{' '}
-            <span className="font-medium">{currentData.length}</span> registros
+            Mostrando <span className="font-medium">1</span> a <span className="font-medium">{datosFiltrados.length}</span> de{' '}
+            <span className="font-medium">{datosFiltrados.length}</span> registros
           </p>
           <div className="flex gap-2">
             <button className="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-white transition-colors">Anterior</button>

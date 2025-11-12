@@ -13,12 +13,16 @@ const LimpiezaDatos = () => {
     { id: 1, type: 'Duplicados', count: 245, severity: 'high', color: 'red' },
     { id: 2, type: 'Valores Nulos', count: 89, severity: 'medium', color: 'yellow' },
     { id: 3, type: 'Valores Correctos', count: 34, severity: 'check', color: 'green' },
+    { id: 4, type: 'Score Calidad', count: '100%', severity: 'check', color: 'green' },
+    { id: 5, type: 'Datos a Normalizar', count: 61, severity: 'medium', color: 'blue' }, // Agregado para normalizar
   ];
 
   const cleaningActions = [
     { id: 1, name: 'Analizar datos', description: 'Analizar la calidad y estructura de los datos', icon: BarChart3 },
     { id: 2, name: 'Quitar duplicados', description: 'Remover registros duplicados basándose en DNI', icon: Copy },
     { id: 3, name: 'Limpiar datos null', description: 'Rellenar o eliminar valores nulos', icon: MinusCircle },
+    { id: 4, name: 'Normalizar Datos', description: 'Ajustar los valores para que estén en la misma escala y sean más fáciles de comparar', icon: MinusCircle },
+
   ];
 
   const sampleData = [
@@ -88,7 +92,7 @@ const LimpiezaDatos = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
           {cleaningActions.map((action) => {
             const Icon = action.icon;
             return (
@@ -116,12 +120,12 @@ const LimpiezaDatos = () => {
                   )}
                 </div>
                 <div className="text-center">
-                  <p className={`font-medium ${
+                  <p className={`font-semibold text-base ${
                     completedSteps.includes(action.id) ? 'text-green-800' : 'text-gray-800'
                   }`}>
                     {action.name}
                   </p>
-                  <p className="text-xs text-gray-600 mt-1">{action.description}</p>
+                  <p className="text-sm text-gray-700 mt-1">{action.description}</p>
                 </div>
                 {completedSteps.includes(action.id) && (
                   <CheckCircle className="text-green-600" size={20} />
@@ -145,7 +149,7 @@ const LimpiezaDatos = () => {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             {issues.map((issue) => (
               <div key={issue.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
                 <div className="flex items-center justify-between mb-2">
