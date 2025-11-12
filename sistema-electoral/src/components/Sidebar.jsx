@@ -6,6 +6,20 @@ import {
 } from 'lucide-react';
 
 const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen, onLogout }) => {
+  const handleLogout = () => {
+    // Limpiar el localStorage
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('userRole');
+    
+    // Llamar la función de logout del padre
+    if (onLogout) {
+      onLogout();
+    }
+    
+    // Redirigir al landing page usando window.location
+    window.location.href = '/';
+  };
+
   const menuSections = [
     {
       title: 'General',
@@ -164,7 +178,7 @@ const Sidebar = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen,
       {/* Logout Section */}
       <div className="relative p-4 border-t border-white border-opacity-10">
         <button 
-          onClick={onLogout}
+          onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-3 text-indigo-200 hover:bg-red-500 hover:bg-opacity-20 rounded-xl transition-all group"
         >
           <LogOut size={20} className="group-hover:scale-110 transition-transform text-red-300" />

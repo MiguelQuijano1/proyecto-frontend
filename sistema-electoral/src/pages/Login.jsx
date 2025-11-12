@@ -1,8 +1,10 @@
 // sistema-electoral/src/pages/Login.jsx
 import { useState } from 'react';
-import { Lock, Eye, EyeOff, CheckCircle, AlertCircle, Shield } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Lock, Eye, EyeOff, CheckCircle, AlertCircle, Shield, ArrowLeft } from 'lucide-react';
 
 const Login = ({ onLoginSuccess }) => {
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [loginData, setLoginData] = useState({
         username: '',
@@ -43,6 +45,15 @@ const Login = ({ onLoginSuccess }) => {
             </div>
 
             <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
+                {/* Botón de Volver */}
+                <button
+                    onClick={() => navigate('/')}
+                    className="absolute top-4 left-4 z-10 flex items-center gap-2 px-3 py-2 bg-white/90 hover:bg-white rounded-lg transition-all text-gray-700 hover:text-indigo-600 text-sm font-medium shadow-sm"
+                >
+                    <ArrowLeft size={16} />
+                    Volver
+                </button>
+                
                 {/* Header */}
                 <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-8 text-white">
                     <div className="flex items-center justify-center mb-4">

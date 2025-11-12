@@ -1,6 +1,6 @@
 // sistema-electoral/src/App.jsx
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 
@@ -23,6 +23,78 @@ import LandingPage from './pages/LandingPage';
 // Componente ProtectedRoute para proteger rutas del dashboard
 const ProtectedRoute = ({ children, isAuthenticated }) => {
   return isAuthenticated ? children : <Navigate to="/login" />;
+};
+
+// Componente para manejar el logout con navegación
+const DashboardLayoutWrapper = ({ isAuthenticated, handleLogout, activeSection, setActiveSection, sidebarOpen, setSidebarOpen }) => {
+  const navigate = useNavigate();
+
+  const onLogout = () => {
+    handleLogout();
+    navigate('/');
+  };
+
+  return (
+    <ProtectedRoute isAuthenticated={isAuthenticated}>
+      <DashboardLayout 
+        activeSection={activeSection}
+        setActiveSection={setActiveSection}
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+        onLogout={onLogout}
+      />
+    </ProtectedRoute>
+  );
+};
+
+// Componente DashboardLayout para las rutas protegidas
+const DashboardLayout = ({ activeSection, setActiveSection, sidebarOpen, setSidebarOpen, onLogout }) => {
+  // Función para renderizar el contenido según la sección activa
+  const renderContent = () => {
+    switch(activeSection) {
+      case 'dashboard': return <Dashboard />;
+      case 'resultados': return <ResultadosElectorales />;
+      
+      // Módulo Electoral
+      case 'candidatos': return <Candidatos />;
+      case 'votantes': return <RegistroVotantes />;
+      
+      // Módulo de Datos
+      case 'datos': return <GestionDatos />;
+      case 'carga': return <CargaDatos />;
+      case 'limpieza': return <LimpiezaDatos />;
+      case 'analisis': return <AnalisisEstadistico />;
+      case 'visualizacion': return <Visualizacion />;
+      
+      // Módulo de Administración
+      case 'reportes': return <Reportes />;
+      
+      default: return <Dashboard />;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex">
+      <Sidebar 
+        activeSection={activeSection}
+        setActiveSection={setActiveSection}
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+        onLogout={onLogout}
+      />
+      
+      <main className="flex-1 overflow-auto">
+        <Header 
+          activeSection={activeSection}
+          sidebarOpen={sidebarOpen}
+        />
+        
+        <div className="p-8">
+          {renderContent()}
+        </div>
+      </main>
+    </div>
+  );
 };
 
 function App() {
@@ -54,56 +126,6 @@ function App() {
     setActiveSection('dashboard');
   };
 
-  // Componente DashboardLayout para las rutas protegidas
-  const DashboardLayout = () => {
-    // Función para renderizar el contenido según la sección activa
-    const renderContent = () => {
-      switch(activeSection) {
-        case 'dashboard': return <Dashboard />;
-        case 'resultados': return <ResultadosElectorales />;
-        
-        // Módulo Electoral
-        case 'candidatos': return <Candidatos />;
-        case 'votantes': return <RegistroVotantes />;
-        
-        // Módulo de Datos
-        case 'datos': return <GestionDatos />;
-        case 'carga': return <CargaDatos />;
-        case 'limpieza': return <LimpiezaDatos />;
-        case 'analisis': return <AnalisisEstadistico />;
-        case 'visualizacion': return <Visualizacion />;
-        
-        // Módulo de Administración
-        case 'reportes': return <Reportes />;
-        
-        default: return <Dashboard />;
-      }
-    };
-
-    return (
-      <div className="min-h-screen bg-gray-50 flex">
-        <Sidebar 
-          activeSection={activeSection}
-          setActiveSection={setActiveSection}
-          sidebarOpen={sidebarOpen}
-          setSidebarOpen={setSidebarOpen}
-          onLogout={handleLogout}
-        />
-        
-        <main className="flex-1 overflow-auto">
-          <Header 
-            activeSection={activeSection}
-            sidebarOpen={sidebarOpen}
-          />
-          
-          <div className="p-8">
-            {renderContent()}
-          </div>
-        </main>
-      </div>
-    );
-  };
-
   return (
     <Router>
       <Routes>
@@ -124,9 +146,14 @@ function App() {
         <Route 
           path="/dashboard/*" 
           element={
-            <ProtectedRoute isAuthenticated={isAuthenticated}>
-              <DashboardLayout />
-            </ProtectedRoute>
+            <DashboardLayoutWrapper
+              isAuthenticated={isAuthenticated}
+              handleLogout={handleLogout}
+              activeSection={activeSection}
+              setActiveSection={setActiveSection}
+              sidebarOpen={sidebarOpen}
+              setSidebarOpen={setSidebarOpen}
+            />
           } 
         />
         
