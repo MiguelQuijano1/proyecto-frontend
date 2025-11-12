@@ -62,7 +62,7 @@ const Header = ({ activeSection, sidebarOpen }) => {
             className="flex items-center gap-3 p-2 pr-4 hover:bg-white/50 rounded-xl transition-all group"
             whileHover={{ scale: 1.05 }}
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30 group-hover:scale-110 transition-transform">
+            <div className="w-10 h-10 bg-gradient-to-br from-slate-600 via-slate-700 to-slate-800 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30 group-hover:scale-110 transition-transform">
               <User size={20} className="text-white" />
             </div>
             <div className="text-left hidden lg:block">

@@ -1,22 +1,9 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { TrendingUp, Calculator, BarChart2, PieChart, Activity } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const AnalisisEstadistico = () => {
   const [selectedAnalysis, setSelectedAnalysis] = useState('descriptivo');
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } },
-  };
 
   const estadisticas = {
     descriptivas: [
@@ -41,413 +28,431 @@ const AnalisisEstadistico = () => {
     ]
   };
 
-  return (
-    <motion.div 
+  // Animaciones simplificadas
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5
+      }
+    }
+  };
+
+  const buttonVariants = {
+    hover: { scale: 1.05 },
+    tap: { scale: 0.95 }
+  };
+
+  // Contenido de cada análisis
+  const AnalisisDescriptivo = () => (
+    <motion.div
+      key="descriptivo"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
       className="space-y-6"
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
     >
-      {/* Selector de Tipo de Análisis */}
+      {/* Estadísticas Descriptivas */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {estadisticas.descriptivas.map((stat, index) => {
+          const Icon = stat.icon;
+          return (
+            <motion.div 
+              key={index} 
+              className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              whileHover={{ scale: 1.02 }}
+            >
+              <div className={`inline-flex p-3 bg-${stat.color}-100 rounded-lg mb-3`}>
+                <Icon className={`text-${stat.color}-600`} size={24} />
+              </div>
+              <p className="text-sm text-gray-600 mb-1">{stat.label}</p>
+              <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Distribución por Edad */}
       <motion.div 
-        variants={itemVariants}
         className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
       >
-        <h3 className="text-lg font-bold text-gray-800 mb-4">Tipo de Análisis</h3>
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-3 gap-4"
-          variants={containerVariants}
-        >
-          <button
-            onClick={() => setSelectedAnalysis('descriptivo')}
-            className={`p-4 rounded-lg border-2 transition-all ${
-              selectedAnalysis === 'descriptivo'
-                ? 'border-indigo-500 bg-indigo-50'
-                : 'border-gray-200 hover:border-indigo-300'
-            }`}
-          >
-            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-              <Calculator className={`mx-auto mb-2 ${
-                selectedAnalysis === 'descriptivo' ? 'text-indigo-600' : 'text-gray-400'
-              }`} size={32} />
+        <h3 className="text-lg font-bold text-gray-800 mb-4">Distribución por Rango de Edad</h3>
+        <div className="space-y-4">
+          {estadisticas.distribucion.map((item, index) => (
+            <motion.div 
+              key={index}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 + index * 0.1 }}
+            >
+              <div className="flex justify-between mb-2">
+                <span className="text-sm font-medium text-gray-700">{item.rango} años</span>
+                <span className="text-sm text-gray-600">
+                  {item.cantidad.toLocaleString()} ({item.porcentaje}%)
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                <motion.div
+                  className="bg-gradient-to-r from-slate-500 to-slate-700 h-3 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${item.porcentaje * 2.5}%` }}
+                  transition={{ duration: 1, delay: 0.5 + index * 0.1 }}
+                />
+              </div>
             </motion.div>
-            <p className="font-medium text-gray-800">Análisis Descriptivo</p>
-            <p className="text-xs text-gray-600 mt-1">Estadísticas básicas</p>
-          </button>
-
-          <button
-            onClick={() => setSelectedAnalysis('inferencial')}
-            className={`p-4 rounded-lg border-2 transition-all ${
-              selectedAnalysis === 'inferencial'
-                ? 'border-indigo-500 bg-indigo-50'
-                : 'border-gray-200 hover:border-indigo-300'
-            }`}
-          >
-            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-              <TrendingUp className={`mx-auto mb-2 ${
-                selectedAnalysis === 'inferencial' ? 'text-indigo-600' : 'text-gray-400'
-              }`} size={32} />
-            </motion.div>
-            <p className="font-medium text-gray-800">Análisis Inferencial</p>
-            <p className="text-xs text-gray-600 mt-1">Pruebas de hipótesis</p>
-          </button>
-
-          <button
-            onClick={() => setSelectedAnalysis('predictivo')}
-            className={`p-4 rounded-lg border-2 transition-all ${
-              selectedAnalysis === 'predictivo'
-                ? 'border-indigo-500 bg-indigo-50'
-                : 'border-gray-200 hover:border-indigo-300'
-            }`}
-          >
-            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-              <Activity className={`mx-auto mb-2 ${
-                selectedAnalysis === 'predictivo' ? 'text-indigo-600' : 'text-gray-400'
-              }`} size={32} />
-            </motion.div>
-            <p className="font-medium text-gray-800">Análisis Predictivo</p>
-            <p className="text-xs text-gray-600 mt-1">Modelos y predicciones</p>
-          </button>
-        </motion.div>
+          ))}
+        </div>
       </motion.div>
 
-      {/* Estadísticas Descriptivas */}
-      {selectedAnalysis === 'descriptivo' && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          variants={containerVariants}
-          className="space-y-6"
+      {/* Distribución por Distrito */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <motion.div 
+          className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
         >
-          <motion.div 
-            className="grid grid-cols-1 md:grid-cols-4 gap-4"
-            variants={containerVariants}
-          >
-            {estadisticas.descriptivas.map((stat, index) => {
-              const Icon = stat.icon;
-              return (
-                <motion.div 
-                  key={index} 
-                  variants={itemVariants}
-                  whileHover={{ y: -5 }}
-                  className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
-                >
-                  <div className={`inline-flex p-3 bg-${stat.color}-100 rounded-lg mb-3`}>
-                    <Icon className={`text-${stat.color}-600`} size={24} />
+          <h3 className="text-lg font-bold text-gray-800 mb-4">Votantes por Distrito</h3>
+          <div className="space-y-3">
+            {estadisticas.distritos.map((distrito, index) => (
+              <motion.div 
+                key={index} 
+                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 + index * 0.1 }}
+                whileHover={{ scale: 1.02 }}
+              >
+                <div className="flex-1">
+                  <p className="font-medium text-gray-800">{distrito.nombre}</p>
+                  <p className="text-xs text-gray-600">{distrito.porcentaje}% del total</p>
+                </div>
+                <p className="text-lg font-bold text-slate-600">
+                  {distrito.votantes.toLocaleString()}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        <motion.div 
+          className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+        >
+          <h3 className="text-lg font-bold text-gray-800 mb-4">Resumen Estadístico</h3>
+          <div className="space-y-4">
+            {[
+              { color: 'blue', title: 'Coeficiente de Variación', value: '31.95%', desc: 'Variabilidad moderada' },
+              { color: 'green', title: 'Asimetría', value: '0.35', desc: 'Distribución ligeramente sesgada' },
+              { color: 'purple', title: 'Curtosis', value: '-0.82', desc: 'Distribución platicúrtica' }
+            ].map((stat, index) => (
+              <motion.div 
+                key={index}
+                className={`p-4 bg-${stat.color}-50 border border-${stat.color}-200 rounded-lg`}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.7 + index * 0.1 }}
+                whileHover={{ scale: 1.02 }}
+              >
+                <p className={`text-sm text-${stat.color}-800 font-medium`}>{stat.title}</p>
+                <p className={`text-2xl font-bold text-${stat.color}-900 mt-1`}>{stat.value}</p>
+                <p className={`text-xs text-${stat.color}-700 mt-1`}>{stat.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+
+  const AnalisisInferencial = () => (
+    <motion.div
+      key="inferencial"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+      className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+    >
+      <motion.div 
+        className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <h3 className="text-lg font-bold text-gray-800 mb-4">Pruebas de Hipótesis</h3>
+        <div className="space-y-4">
+          {[
+            { title: 'Prueba Chi-cuadrado', stat1: 'Estadístico χ²', value1: '24.56', stat2: 'Valor p', value2: '0.0023', desc: 'Resultado: Se rechaza H₀ (α = 0.05)' },
+            { title: 'Prueba T de Student', stat1: 'Estadístico t', value1: '3.42', stat2: 'Valor p', value2: '0.0008', desc: 'Diferencia significativa entre grupos' },
+            { title: 'ANOVA', stat1: 'F-estadístico', value1: '12.89', stat2: 'Valor p', value2: '< 0.001', desc: 'Diferencias significativas entre distritos' }
+          ].map((test, index) => (
+            <motion.div 
+              key={index}
+              className="p-4 border border-gray-200 rounded-lg"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 + index * 0.1 }}
+              whileHover={{ scale: 1.02 }}
+            >
+              <p className="font-medium text-gray-800 mb-2">{test.title}</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <p className="text-xs text-gray-600">{test.stat1}</p>
+                  <p className="text-lg font-bold text-gray-800">{test.value1}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-600">{test.stat2}</p>
+                  <p className="text-lg font-bold text-green-600">{test.value2}</p>
+                </div>
+              </div>
+              <p className="text-xs text-gray-600 mt-2">{test.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      <motion.div 
+        className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.2 }}
+      >
+        <h3 className="text-lg font-bold text-gray-800 mb-4">Intervalos de Confianza</h3>
+        <div className="space-y-4">
+          {[
+            { color: 'indigo', title: 'Media poblacional (95% IC)', value: '36.8 - 40.2 años', desc: 'Intervalo de confianza del 95%' },
+            { color: 'green', title: 'Proporción (95% IC)', value: '0.62 - 0.68', desc: 'Proporción de votantes activos' },
+            { color: 'purple', title: 'Diferencia de medias (95% IC)', value: '2.3 - 5.7 años', desc: 'Entre Lima y provincias' }
+          ].map((interval, index) => (
+            <motion.div 
+              key={index}
+              className={`p-4 bg-${interval.color}-50 border border-${interval.color}-200 rounded-lg`}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3 + index * 0.1 }}
+              whileHover={{ scale: 1.02 }}
+            >
+              <p className={`text-sm font-medium text-${interval.color}-900 mb-2`}>{interval.title}</p>
+              <p className={`text-2xl font-bold text-${interval.color}-900`}>{interval.value}</p>
+              <p className={`text-xs text-${interval.color}-700 mt-1`}>{interval.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+
+  const AnalisisPredictivo = () => (
+    <motion.div
+      key="predictivo"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+      className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+    >
+      <motion.div 
+        className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <h3 className="text-lg font-bold text-gray-800 mb-4">Modelos de Predicción</h3>
+        <div className="space-y-4">
+          {[
+            { 
+              title: 'Regresión Lineal', 
+              active: true, 
+              metrics: [
+                { label: 'R² Score', value: '0.847' },
+                { label: 'RMSE', value: '4.23' }
+              ]
+            },
+            { 
+              title: 'Random Forest', 
+              active: false,
+              metrics: [
+                { label: 'Precisión', value: '92.3%' },
+                { label: 'F1-Score', value: '0.91' }
+              ]
+            },
+            { 
+              title: 'XGBoost', 
+              active: false,
+              metrics: [
+                { label: 'Precisión', value: '94.1%' },
+                { label: 'F1-Score', value: '0.93' }
+              ]
+            }
+          ].map((model, index) => (
+            <motion.div 
+              key={index}
+              className={`p-4 border-2 ${model.active ? 'border-slate-500 bg-slate-50' : 'border-gray-200'} rounded-lg`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 + index * 0.1 }}
+              whileHover={{ scale: 1.02 }}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <p className="font-bold text-gray-800">{model.title}</p>
+                {model.active && (
+                  <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                    Activo
+                  </span>
+                )}
+              </div>
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                {model.metrics.map((metric, idx) => (
+                  <div key={idx}>
+                    <p className="text-xs text-gray-600">{metric.label}</p>
+                    <p className={`text-lg font-bold ${model.active ? 'text-slate-600' : 'text-gray-800'}`}>
+                      {metric.value}
+                    </p>
                   </div>
-                  <p className="text-sm text-gray-600 mb-1">{stat.label}</p>
-                  <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
-                </motion.div>
-              );
-            })}
+                ))}
+              </div>
+              {model.active && (
+                <motion.button 
+                  className="w-full py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors text-sm"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Ver Detalles
+                </motion.button>
+              )}
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      <motion.div 
+        className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+      >
+        <h3 className="text-lg font-bold text-gray-800 mb-4">Predicciones</h3>
+        <div className="space-y-4">
+          <motion.div 
+            className="p-4 bg-gradient-to-r from-slate-50 to-slate-100 border border-slate-200 rounded-lg"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3 }}
+            whileHover={{ scale: 1.02 }}
+          >
+            <p className="text-sm font-medium text-gray-700 mb-2">Participación Estimada 2024</p>
+            <p className="text-3xl font-bold text-slate-900">78.5%</p>
+            <div className="mt-3 flex items-center gap-2 text-xs text-green-700">
+              <TrendingUp size={14} />
+              <span>+3.2% respecto a 2020</span>
+            </div>
           </motion.div>
 
-          {/* Distribución por Edad */}
           <motion.div 
-            variants={itemVariants}
-            className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+            className="p-4 border border-gray-200 rounded-lg"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            whileHover={{ scale: 1.02 }}
           >
-            <h3 className="text-lg font-bold text-gray-800 mb-4">Distribución por Rango de Edad</h3>
-            <div className="space-y-4">
-              {estadisticas.distribucion.map((item, index) => (
+            <p className="text-sm font-medium text-gray-700 mb-3">Factores Principales</p>
+            <div className="space-y-2">
+              {[
+                { label: 'Edad', percentage: 35, color: 'slate' },
+                { label: 'Distrito', percentage: 28, color: 'blue' },
+                { label: 'Nivel Educativo', percentage: 22, color: 'purple' },
+                { label: 'Otros', percentage: 15, color: 'green' }
+              ].map((factor, index) => (
                 <motion.div 
                   key={index}
-                  variants={itemVariants}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5 + index * 0.1 }}
                 >
-                  <div className="flex justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-700">{item.rango} años</span>
-                    <span className="text-sm text-gray-600">
-                      {item.cantidad.toLocaleString()} ({item.porcentaje}%)
-                    </span>
+                  <div className="flex justify-between text-xs mb-1">
+                    <span>{factor.label}</span>
+                    <span className="font-medium">{factor.percentage}%</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-3">
+                  <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                     <motion.div
+                      className={`bg-${factor.color}-500 h-2 rounded-full`}
                       initial={{ width: 0 }}
-                      animate={{ width: `${item.porcentaje * 2.5}%` }}
-                      transition={{ duration: 0.8, delay: 0.1 * index }}
-                      className="bg-gradient-to-r from-indigo-500 to-purple-500 h-3 rounded-full"
-                    ></motion.div>
+                      animate={{ width: `${factor.percentage}%` }}
+                      transition={{ duration: 1, delay: 0.6 + index * 0.1 }}
+                    />
                   </div>
                 </motion.div>
               ))}
             </div>
           </motion.div>
-
-          {/* Distribución por Distrito */}
-          <motion.div 
-            className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-            variants={containerVariants}
-          >
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-              <h3 className="text-lg font-bold text-gray-800 mb-4">Votantes por Distrito</h3>
-              <div className="space-y-3">
-                {estadisticas.distritos.map((distrito, index) => (
-                  <motion.div 
-                    key={index}
-                    variants={itemVariants}
-                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                  >
-                    <div className="flex-1">
-                      <p className="font-medium text-gray-800">{distrito.nombre}</p>
-                      <p className="text-xs text-gray-600">{distrito.porcentaje}% del total</p>
-                    </div>
-                    <motion.p 
-                      className="text-lg font-bold text-indigo-600"
-                      whileHover={{ scale: 1.1 }}
-                    >
-                      {distrito.votantes.toLocaleString()}
-                    </motion.p>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-
-            <motion.div 
-              variants={itemVariants}
-              className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
-            >
-              <h3 className="text-lg font-bold text-gray-800 mb-4">Resumen Estadístico</h3>
-              <div className="space-y-4">
-                <motion.div 
-                  whileHover={{ scale: 1.02 }}
-                  className="p-4 bg-blue-50 border border-blue-200 rounded-lg"
-                >
-                  <p className="text-sm text-blue-800 font-medium">Coeficiente de Variación</p>
-                  <p className="text-2xl font-bold text-blue-900 mt-1">31.95%</p>
-                  <p className="text-xs text-blue-700 mt-1">Variabilidad moderada</p>
-                </motion.div>
-                <motion.div 
-                  whileHover={{ scale: 1.02 }}
-                  className="p-4 bg-green-50 border border-green-200 rounded-lg"
-                >
-                  <p className="text-sm text-green-800 font-medium">Asimetría</p>
-                  <p className="text-2xl font-bold text-green-900 mt-1">0.35</p>
-                  <p className="text-xs text-green-700 mt-1">Distribución ligeramente sesgada</p>
-                </motion.div>
-                <motion.div 
-                  whileHover={{ scale: 1.02 }}
-                  className="p-4 bg-purple-50 border border-purple-200 rounded-lg"
-                >
-                  <p className="text-sm text-purple-800 font-medium">Curtosis</p>
-                  <p className="text-2xl font-bold text-purple-900 mt-1">-0.82</p>
-                  <p className="text-xs text-purple-700 mt-1">Distribución platicúrtica</p>
-                </motion.div>
-              </div>
-            </motion.div>
-          </motion.div>
-        </motion.div>
-      )}
-
-      {/* Análisis Inferencial */}
-      {selectedAnalysis === 'inferencial' && (
-        <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          variants={containerVariants}
-        >
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">Pruebas de Hipótesis</h3>
-            <div className="space-y-4">
-              <div className="p-4 border border-gray-200 rounded-lg">
-                <p className="font-medium text-gray-800 mb-2">Prueba Chi-cuadrado</p>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <p className="text-xs text-gray-600">Estadístico χ²</p>
-                    <p className="text-lg font-bold text-gray-800">24.56</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-600">Valor p</p>
-                    <p className="text-lg font-bold text-green-600">0.0023</p>
-                  </div>
-                </div>
-                <p className="text-xs text-gray-600 mt-2">
-                  Resultado: Se rechaza H₀ (α = 0.05)
-                </p>
-              </div>
-
-              <div className="p-4 border border-gray-200 rounded-lg">
-                <p className="font-medium text-gray-800 mb-2">Prueba T de Student</p>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <p className="text-xs text-gray-600">Estadístico t</p>
-                    <p className="text-lg font-bold text-gray-800">3.42</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-600">Valor p</p>
-                    <p className="text-lg font-bold text-green-600">0.0008</p>
-                  </div>
-                </div>
-                <p className="text-xs text-gray-600 mt-2">
-                  Diferencia significativa entre grupos
-                </p>
-              </div>
-
-              <div className="p-4 border border-gray-200 rounded-lg">
-                <p className="font-medium text-gray-800 mb-2">ANOVA</p>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <p className="text-xs text-gray-600">F-estadístico</p>
-                    <p className="text-lg font-bold text-gray-800">12.89</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-600">Valor p</p>
-                    <p className="text-lg font-bold text-green-600">{'< 0.001'}</p>
-                  </div>
-                </div>
-                <p className="text-xs text-gray-600 mt-2">
-                  Diferencias significativas entre distritos
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">Intervalos de Confianza</h3>
-            <div className="space-y-4">
-              <div className="p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
-                <p className="text-sm font-medium text-indigo-900 mb-2">Media poblacional (95% IC)</p>
-                <p className="text-2xl font-bold text-indigo-900">36.8 - 40.2 años</p>
-                <p className="text-xs text-indigo-700 mt-1">Intervalo de confianza del 95%</p>
-              </div>
-
-              <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                <p className="text-sm font-medium text-green-900 mb-2">Proporción (95% IC)</p>
-                <p className="text-2xl font-bold text-green-900">0.62 - 0.68</p>
-                <p className="text-xs text-green-700 mt-1">Proporción de votantes activos</p>
-              </div>
-
-              <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
-                <p className="text-sm font-medium text-purple-900 mb-2">Diferencia de medias (95% IC)</p>
-                <p className="text-2xl font-bold text-purple-900">2.3 - 5.7 años</p>
-                <p className="text-xs text-purple-700 mt-1">Entre Lima y provincias</p>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      )}
-
-      {/* Análisis Predictivo */}
-      {selectedAnalysis === 'predictivo' && (
-        <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          variants={containerVariants}
-        >
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">Modelos de Predicción</h3>
-            <div className="space-y-4">
-              <div className="p-4 border-2 border-indigo-500 bg-indigo-50 rounded-lg">
-                <div className="flex items-center justify-between mb-3">
-                  <p className="font-bold text-gray-800">Regresión Lineal</p>
-                  <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
-                    Activo
-                  </span>
-                </div>
-                <div className="grid grid-cols-2 gap-3 mb-3">
-                  <div>
-                    <p className="text-xs text-gray-600">R² Score</p>
-                    <p className="text-lg font-bold text-indigo-600">0.847</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-600">RMSE</p>
-                    <p className="text-lg font-bold text-indigo-600">4.23</p>
-                  </div>
-                </div>
-                <button className="w-full py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm">
-                  Ver Detalles
-                </button>
-              </div>
-
-              <div className="p-4 border border-gray-200 rounded-lg hover:border-indigo-300 transition-colors">
-                <p className="font-medium text-gray-800 mb-2">Random Forest</p>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <p className="text-xs text-gray-600">Precisión</p>
-                    <p className="text-lg font-bold text-gray-800">92.3%</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-600">F1-Score</p>
-                    <p className="text-lg font-bold text-gray-800">0.91</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-4 border border-gray-200 rounded-lg hover:border-indigo-300 transition-colors">
-                <p className="font-medium text-gray-800 mb-2">XGBoost</p>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <p className="text-xs text-gray-600">Precisión</p>
-                    <p className="text-lg font-bold text-gray-800">94.1%</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-600">F1-Score</p>
-                    <p className="text-lg font-bold text-gray-800">0.93</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">Predicciones</h3>
-            <div className="space-y-4">
-              <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg">
-                <p className="text-sm font-medium text-gray-700 mb-2">Participación Estimada 2024</p>
-                <p className="text-3xl font-bold text-indigo-900">78.5%</p>
-                <div className="mt-3 flex items-center gap-2 text-xs text-green-700">
-                  <TrendingUp size={14} />
-                  <span>+3.2% respecto a 2020</span>
-                </div>
-              </div>
-
-              <div className="p-4 border border-gray-200 rounded-lg">
-                <p className="text-sm font-medium text-gray-700 mb-3">Factores Principales</p>
-                <div className="space-y-2">
-                  <div>
-                    <div className="flex justify-between text-xs mb-1">
-                      <span>Edad</span>
-                      <span className="font-medium">35%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className="bg-indigo-500 h-2 rounded-full" style={{width: '35%'}}></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-xs mb-1">
-                      <span>Distrito</span>
-                      <span className="font-medium">28%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className="bg-blue-500 h-2 rounded-full" style={{width: '28%'}}></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-xs mb-1">
-                      <span>Nivel Educativo</span>
-                      <span className="font-medium">22%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className="bg-purple-500 h-2 rounded-full" style={{width: '22%'}}></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-xs mb-1">
-                      <span>Otros</span>
-                      <span className="font-medium">15%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className="bg-green-500 h-2 rounded-full" style={{width: '15%'}}></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      )}
+        </div>
+      </motion.div>
     </motion.div>
+  );
+
+  return (
+    <div className="space-y-6">
+      {/* Selector de Tipo de Análisis */}
+      <motion.div 
+        className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <h3 className="text-lg font-bold text-gray-800 mb-4">Tipo de Análisis</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            { id: 'descriptivo', label: 'Análisis Descriptivo', description: 'Estadísticas básicas', icon: Calculator },
+            { id: 'inferencial', label: 'Análisis Inferencial', description: 'Pruebas de hipótesis', icon: TrendingUp },
+            { id: 'predictivo', label: 'Análisis Predictivo', description: 'Modelos y predicciones', icon: Activity }
+          ].map((analysis, index) => (
+            <motion.button
+              key={analysis.id}
+              onClick={() => setSelectedAnalysis(analysis.id)}
+              className={`p-4 rounded-lg border-2 transition-all ${
+                selectedAnalysis === analysis.id
+                  ? 'border-slate-500 bg-slate-50'
+                  : 'border-gray-200 hover:border-slate-300'
+              }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <analysis.icon className={`mx-auto mb-2 ${
+                selectedAnalysis === analysis.id ? 'text-slate-600' : 'text-gray-400'
+              }`} size={32} />
+              <p className="font-medium text-gray-800">{analysis.label}</p>
+              <p className="text-xs text-gray-600 mt-1">{analysis.description}</p>
+            </motion.button>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Contenido del Análisis Seleccionado */}
+      <div>
+        {selectedAnalysis === 'descriptivo' && <AnalisisDescriptivo />}
+        {selectedAnalysis === 'inferencial' && <AnalisisInferencial />}
+        {selectedAnalysis === 'predictivo' && <AnalisisPredictivo />}
+      </div>
+    </div>
   );
 };
 
