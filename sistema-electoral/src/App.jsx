@@ -5,20 +5,19 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 
 // Páginas existentes
-import Dashboard from './pages/Dashboard';
-import GestionDatos from './pages/GestionDatos';
-import CargaDatos from './pages/CargaDatos';
-import LimpiezaDatos from './pages/LimpiezaDatos';
-import AnalisisEstadistico from './pages/AnalisisEstadistico';
-import Visualizacion from './pages/Visualizacion';
+import Dashboard from './pages/dashboard/Dashboard';
+import GestionDatos from './pages/datos/GestionDatos';
+import CargaDatos from './pages/datos/CargaDatos';
+import LimpiezaDatos from './pages/datos/LimpiezaDatos';
+import AnalisisEstadistico from './pages/analisis/AnalisisEstadistico';
+import Visualizacion from './pages/analisis/Visualizacion';
 
-import Candidatos from './pages/Candidatos';
-import ResultadosElectorales from './pages/ResultadosElectorales';
-import Reportes from './pages/Reportes';
-import EntrenamientoModelo from './pages/EntrenamientoModelo';
+import Candidatos from './pages/electoral/Candidatos';
+import Reportes from './pages/reportes/Reportes';
+import EntrenamientoModelo from './pages/analisis/EntrenamientoModelo';
 // Páginas de autenticación
-import Login from './pages/Login';
-import LandingPage from './pages/LandingPage';
+import Login from './pages/auth/Login';
+import LandingPage from './pages/auth/LandingPage';
 
 // Componente ProtectedRoute para proteger rutas del dashboard
 const ProtectedRoute = ({ children, isAuthenticated }) => {
@@ -57,7 +56,6 @@ const DashboardLayout = ({ activeSection, setActiveSection, sidebarOpen, setSide
       
       // Módulo Electoral
       case 'candidatos': return <Candidatos />;
-      case 'votantes': return <RegistroVotantes />;
       
       // Módulo de Datos
       case "Entrenamiento": return <EntrenamientoModelo />;

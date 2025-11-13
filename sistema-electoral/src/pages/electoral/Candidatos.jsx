@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { UserPlus, Search, Filter, Edit, Trash2, Eye, Award, Users, TrendingUp, X, FileText, CheckCircle, Clock, Trophy } from 'lucide-react';
-import { containerVariants, itemVariants } from '../animations';
+import { containerVariants, itemVariants } from '../../animations';
 
 const Candidatos = () => {
   const [showModal, setShowModal] = useState(false);

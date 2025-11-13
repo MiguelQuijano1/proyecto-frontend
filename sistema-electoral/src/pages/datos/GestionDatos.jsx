@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Filter, Download, Trash2, Edit, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
-import { containerVariants, itemVariants } from '../animations';
+import { containerVariants, itemVariants } from '../../animations';
 
 const GestionDatos = () => {
   const [activeTab, setActiveTab] = useState('presidencial');
